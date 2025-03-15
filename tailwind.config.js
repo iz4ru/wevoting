@@ -13,6 +13,7 @@ export default {
         extend: {
             fontFamily: {
                 sans: ['Lexend', ...defaultTheme.fontFamily.sans],
+                backgroundImage: {'login': "url('/img/bg-login.png')"},
             },
         },
     },

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('username');
             $table->string('activity');
-            $table->string('role');
+            $table->enum('role', ['admin', 'panitia']);
             $table->timestamps();
         });
     }
