@@ -134,10 +134,13 @@
                                 </div>
 
                                 <!-- Register Admin Button -->
-                                <div class="mt-6">
+                                <div class="mt-6 w-full flex flex-column gap-4">
+                                    <a href="{{ route('admin.mgmt') }}" class="mt-8 w-full px-6 py-4 bg-gray-400/80 hover:bg-gray-500/80 text-white rounded-xl transition-colors flex items-center justify-center gap-3">
+                                        <span class="font-semibold">Kembali</span>
+                                    </a>
                                     <button type="submit"
                                         class="mt-8 w-full px-6 py-4 bg-[#7C3AED] hover:bg-[#6D31D5] text-white rounded-xl transition-colors flex items-center justify-center gap-3">
-                                        <span class="font-semibold">Tambahkan Admin</span>
+                                        <span class="font-semibold">Tambahkan</span>
                                         <i class="fa-solid fa-chevron-right"></i>
                                     </button>
                                 </div>

@@ -36,14 +36,15 @@
                     x-cloak
                         class="absolute backdrop-blur-lg right-0 w-48 bg-[#FAFAFA]/90 shadow-lg rounded-lg p-2 z-50 transition transisiton-transform duration-300 ease-in-out">
                         <div class="">
-                            <button action=""
+                            <!-- Muat Profil User yang Ada Pada Session -->
+                            <a href="{{ route('admin.profile.show', Auth::user()->uuid) }}" 
                                 class="flex items-center gap-4 w-full rounded-md px-4 py-2 text-gray-500 hover:bg-gray-200">
                                 <i class="fa-solid fa-user text-gray-500 text-md"></i>
                                 <span>Profil</span>
-                            </button>
+                            </a>
                         </div>
                         <div class="">
-                            <form action="{{ route('admin.logout') }}"
+                            <form action="{{ route('admin.logout') }}" method="POST"
                                 onsubmit="validateForm(event)">
                                 @csrf
                                 <button action="submit"

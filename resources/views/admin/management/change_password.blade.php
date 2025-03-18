@@ -42,17 +42,31 @@
                             </div>
                         @endif
 
-                        <form wire:submit="updatePassword" action="{{ route('admin.mgmt.change_password', $user->id) }}" method="POST">
+                        <form wire:submit="updatePassword" action="{{ route('admin.mgmt.change_password', $user->uuid) }}" method="POST">
                             @csrf
                             @method('PUT')
                             <div class="space-y-4">
 
-                            <!-- Password -->
+                            <!-- Current Password -->
                             <div>
-                                <label for="password" class="text-gray-500 font-medium text-sm">Password</label>
+                                <label for="password_current" class="text-gray-500 font-medium text-sm">Masukkan Password Saat Ini</label>
                                 <div class="relative">
                                     <i class="fa fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
-                                    <input wire:model="password" placeholder="Masukkan Password" type="password"
+                                    <input placeholder="Password Saat Ini"
+                                        type="password" name="password_current" id="password_current"
+                                        class="text-sm w-full h-14 pl-12 pr-12 placeholder:text-gray-300 border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                                        required autocomplete="off">
+                                    <i
+                                        class="fa fa-eye absolute right-4 top-1/2 -translate-y-1/2 text-gray-300 cursor-pointer togglePassword"></i>
+                                </div>
+                            </div>
+
+                            <!-- Password -->
+                            <div>
+                                <label for="password" class="text-gray-500 font-medium text-sm">Masukkan Password Baru</label>
+                                <div class="relative">
+                                    <i class="fa fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
+                                    <input wire:model="password" placeholder="Masukkan Password Baru" type="password"
                                         name="password" id="password"
                                         class="text-sm w-full h-14 pl-12 pr-12 placeholder:text-gray-300 border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
                                         required autocomplete="off">
@@ -64,10 +78,10 @@
                             <!-- Confirm Password -->
                             <div>
                                 <label for="password_confirmation" class="text-gray-500 font-medium text-sm">Konfirmasi
-                                    Password</label>
+                                    Password Baru</label>
                                 <div class="relative">
                                     <i class="fa fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
-                                    <input wire:model="password_confirmation" placeholder="Konfirmasi Password"
+                                    <input wire:model="password_confirmation" placeholder="Konfirmasi Password Baru"
                                         type="password" name="password_confirmation" id="password_confirmation"
                                         class="text-sm w-full h-14 pl-12 pr-12 placeholder:text-gray-300 border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
                                         required autocomplete="off">
@@ -77,10 +91,13 @@
                             </div>
 
                                 <!-- Update Admin Button -->
-                                <div class="mt-6">
+                                <div class="mt-6 w-full flex flex-column gap-4">
+                                    <a href="{{ route('admin.mgmt') }}" class="mt-8 w-full px-6 py-4 bg-gray-400/80 hover:bg-gray-500/80 text-white rounded-xl transition-colors flex items-center justify-center gap-3">
+                                        <span class="font-semibold">Kembali</span>
+                                    </a>
                                     <button type="submit"
                                         class="mt-8 w-full px-6 py-4 bg-[#7C3AED] hover:bg-[#6D31D5] text-white rounded-xl transition-colors flex items-center justify-center gap-3">
-                                        <span class="font-semibold">Update Data Admin</span>
+                                        <span class="font-semibold">Simpan</span>
                                         <i class="fa-solid fa-chevron-right"></i>
                                     </button>
                                 </div>

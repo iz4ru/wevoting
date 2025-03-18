@@ -16,7 +16,7 @@ class LogController extends Controller
         if ($userRole === 'admin') {
             $x['logs'] = Log::all();
         } else {
-            $x['logs'] = Log::where('userid','panitia')->get();
+            $x['logs'] = Log::where('role','panitia')->get();
         }
         return view('admin.log.index',$x);
     }

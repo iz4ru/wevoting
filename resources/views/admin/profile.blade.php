@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Update Data Admin')
+@section('title', 'Profil')
 
 @section('content')
     <div class="flex-1 overflow-y-auto px-8 pt-6 pb-6">
@@ -8,8 +8,8 @@
             <div class="flex flex-col bg-white/30 backdrop-blur-lg rounded-xl shadow-lg p-6">
                 <div class="bg-[#926AE1]/20 rounded-lg shadow-lg p-6">
                     <div class="">
-                        <h1 class="text-2xl lg:text-3xl font-bold text-[#4F22AA] mb-2">Update Data Admin atau Panitia</h1>
-                        <p class="text-sm text-[#4F22AA] lg:text-base">Lihat, perbarui informasi admin atau panitia yang terdaftar dalam sistem.</p>
+                        <h1 class="text-2xl lg:text-3xl font-bold text-[#4F22AA] mb-2">Profil Anda</h1>
+                        <p class="text-sm text-[#4F22AA] lg:text-base">Lihat atau perbarui informasi anda.</p>
                     </div>
                 </div>
                 <hr class="rounded border-t-2 border-[#B8B8B8]/50 my-8 mx-6">
@@ -43,7 +43,7 @@
                             </div>
                         @endif
 
-                        <form wire:submit="updateProfileInformation" action="{{ route('admin.mgmt.update', $user->uuid) }}" method="POST">
+                        <form action="{{ route('admin.profile.update', Auth::user()->uuid) }}" method="POST">
                             @csrf
                             @method('PUT')
                             <div class="space-y-4">
@@ -56,7 +56,7 @@
                                         <input wire:model="name" placeholder="Masukkan Nama" type="text" name="name"
                                             id="name"
                                             class="text-sm w-full h-14 pl-12 placeholder:text-gray-300 border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
-                                            required autocomplete="name" value="{{ $user->name }}">
+                                            required autocomplete="name" value="{{ Auth::user()->name }}">
                                     </div>
                                 </div>
 
@@ -69,7 +69,7 @@
                                         <input wire:model="email" placeholder="Masukkan Email" type="email" name="email"
                                             id="email"
                                             class="text-sm w-full h-14 pl-12 placeholder:text-gray-300 border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
-                                            required autocomplete="email" value="{{ $user->email }}">
+                                            required autocomplete="email" value="{{ Auth::user()->email }}">
                                     </div>
                                 </div>
 
@@ -81,41 +81,95 @@
                                         <input placeholder="Masukkan Username Anda" type="text" name="username"
                                             id="username"
                                             class="text-sm w-full h-14 pl-12 placeholder:text-gray-300 border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
-                                            required autocomplete="username" value="{{ $user->username }}">
+                                            required autocomplete="username" value="{{ Auth::user()->username }}">
                                     </div>
                                 </div>
 
+                                <!-- Current Password -->
+                                <div>
+                                    <label for="password" class="text-gray-500 font-medium text-sm">Password</label>
+                                    <div class="relative">
+                                        <i class="fa fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
+                                        <input wire:model="password" placeholder="Masukkan Password Untuk Konfirmasi"
+                                            type="password" name="current_password" id="current_password"
+                                            class="text-sm w-full h-14 pl-12 pr-12 placeholder:text-gray-300 border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                                            required autocomplete="off">
+                                        <i
+                                            class="fa fa-eye absolute right-4 top-1/2 -translate-y-1/2 text-gray-300 cursor-pointer togglePassword"></i>
+                                    </div>
+                                </div>
+
+                                {{-- 
                                 <!-- Role -->
                                 <div>
                                     <label for="role" class="text-gray-500 font-medium text-sm">Pilih Role</label>
                                     <div class="relative">
                                         <i
-                                            class="fa fa-user-shield absolute left-4 top-1/2 -translate-y-1/2 text-gray-3=400"></i>
+                                            class="fa fa-user-shield absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
                                         <select placeholder="Pilih Role Anda" type="select" name="role" id="role"
-                                            class="text-sm w-full h-14 pl-12 pr-12 bg-3=400 placeholder:text-gray-300 border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
-                                            required autocomplete="off" disabled
+                                            class="text-sm w-full h-14 pl-12 pr-12 text-gray-500 placeholder:text-gray-300 border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                                            required autocomplete="off" 
                                             onchange="this.classList.remove('text-gray-300'); this.classList.add('text-gray-700');">
-                                            <option value="" {{ $user->role === 'admin' ? 'selected' : '' }}>Admin</option>
-                                            <option value="" {{ $user->role === 'panitia' ? 'selected' : '' }}>Panitia</option>
+                                            <option value="admin" {{ Auth::user()->role === 'admin' ? 'selected' : '' }}>
+                                                Admin</option>
+                                            <option value="panitia"
+                                                {{ Auth::user()->role === 'panitia' ? 'selected' : '' }}>Panitia</option>
                                         </select>
                                     </div>
-                                </div>
+                                </div> --}}
+
 
                                 <!-- Update Admin Button -->
-                                <div class="mt-6 w-full flex flex-column gap-4">
-                                    <a href="{{ route('admin.mgmt') }}" class="mt-8 w-full px-6 py-4 bg-gray-400/80 hover:bg-gray-500/80 text-white rounded-xl transition-colors flex items-center justify-center gap-3">
-                                        <span class="font-semibold">Kembali</span>
-                                    </a>
+                                <div class="mt-6">
                                     <button type="submit"
                                         class="mt-8 w-full px-6 py-4 bg-[#7C3AED] hover:bg-[#6D31D5] text-white rounded-xl transition-colors flex items-center justify-center gap-3">
                                         <span class="font-semibold">Simpan</span>
                                         <i class="fa-solid fa-chevron-right"></i>
                                     </button>
                                 </div>
+
+                                {{-- <!-- Password -->
+                                <div>
+                                    <label for="password" class="text-gray-500 font-medium text-sm">Password</label>
+                                    <div class="relative">
+                                        <i class="fa fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
+                                        <input wire:model="password" placeholder="Masukkan Password" type="password"
+                                            name="password" id="password"
+                                            class="text-sm w-full h-14 pl-12 pr-12 placeholder:text-gray-300 border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                                            required autocomplete="off">
+                                        <i
+                                            class="fa fa-eye absolute right-4 top-1/2 -translate-y-1/2 text-gray-300 cursor-pointer togglePassword"></i>
+                                    </div>
+                                </div>
+
+                                <!-- Confirm Password -->
+                                <div>
+                                    <label for="password_confirmation" class="text-gray-500 font-medium text-sm">Konfirmasi
+                                        Password</label>
+                                    <div class="relative">
+                                        <i class="fa fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
+                                        <input wire:model="password_confirmation" placeholder="Konfirmasi Password"
+                                            type="password" name="password_confirmation" id="password_confirmation"
+                                            class="text-sm w-full h-14 pl-12 pr-12 placeholder:text-gray-300 border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                                            required autocomplete="off">
+                                        <i
+                                            class="fa fa-eye absolute right-4 top-1/2 -translate-y-1/2 text-gray-300 cursor-pointer togglePassword"></i>
+                                    </div>
+                                </div> --}}
+
                             </div>
-                        </form>
                     </div>
+                    </form>
+                </div>
+                <!-- Update Admin Button -->
+                <div class="flex flex-col items-center lg:items-start lg:text-left w-full max-w-lg">
+                    <a href="{{ route('admin.mgmt.form_password', Auth::user()->uuid) }}"
+                        class="mt-4 w-full px-6 py-4 bg-[#FFB300] hover:bg-[#C78D04] text-white rounded-xl transition-colors flex items-center justify-center gap-3">
+                        <span class="font-semibold">Ganti Password</span>
+                        <i class="fa-solid fa-key"></i>
+                    </a>
                 </div>
             </div>
+        </div>
 
-        @endsection
+    @endsection

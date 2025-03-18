@@ -134,9 +134,9 @@
                         <!-- Video Section -->
                         <div class="mt-12">
                             <h3 class="text-lg font-semibold text-gray-800 mb-4">Video Kampanye</h3>
-                            <div class="w-full aspect-video bg-gray-200 rounded-lg flex items-center justify-center">
+                            <iframe class="w-full aspect-video bg-gray-200 rounded-lg flex items-center justify-center">
                                 <span class="text-gray-400">Video Placeholder</span>
-                            </div>
+                            </iframe>
                         </div>
                     </div>
                 </div>

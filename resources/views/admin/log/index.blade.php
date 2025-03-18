@@ -18,13 +18,14 @@
                     <table id="adminTable" class="table-auto w-full border-collapse rounded-lg overflow-hidden shadow-lg">
                         <thead class="bg-[#926AE1]/20 backdrop-blur-lg border-gray-300">
                             <tr>
-                                <th class="whitespace-nowrap text-[#4F22AA] border border-gray-300 px-4 py-2 text-center">No
+                                <th class="whitespace-nowrap text-[#4F22AA] border border-gray-300 px-4 py-2 text-center">Log ID
                                 </th>
                                 <th class="whitespace-nowrap text-[#4F22AA] border border-gray-300 px-4 py-2 text-left">
                                     Username</th>
                                 <th class="whitespace-nowrap text-[#4F22AA] border border-gray-300 px-4 py-2 text-left">
                                     Role</th>
-                                <th class="whitespace-nowrap text-[#4F22AA] border border-gray-300 px-4 py-2 text-left">Aktivitas
+                                <th class="whitespace-nowrap text-[#4F22AA] border border-gray-300 px-4 py-2 text-left">
+                                    Aktivitas
                                 </th>
                                 <th class="whitespace-nowrap text-[#4F22AA] border border-gray-300 px-4 py-2 text-center">
                                     Tanggal Waktu</th>
@@ -34,21 +35,26 @@
                             @foreach ($logs as $log)
                                 <tr class="odd:bg-white even:bg-gray-100">
                                     <td
-                                        class="whitespace-nowrap text-gray-600 border border-gray-300 px-4 py-2 text-center">
-                                        {{ $loop->iteration }}</td>
+                                        class="whitespace-nowrap text-gray-600 border border-gray-300 px-4 py-2">
+                                        <span class="flex justify-center">{{ $log->id }}</span></td>
                                     <td class="whitespace-nowrap text-gray-600 border border-gray-300 px-4 py-2">
                                         {{ $log->username }}</td>
                                     @if ($log->role == 'admin')
                                         <td class="whitespace-nowrap text-green-600 border border-gray-300 px-4 py-2">
-                                            Admin</td>
+                                            <span class="flex justify-center">Admin</span></td>
                                     @elseif($log->role == 'panitia')
                                         <td class="whitespace-nowrap text-amber-600 border border-gray-300 px-4 py-2">
-                                            Panitia</td>
+                                            <span class="flex justify-center">Panitia</span></td>
                                     @endif
                                     <td class="whitespace-nowrap text-gray-600 border border-gray-300 px-4 py-2">
                                         {{ $log->activity }}</td>
                                     <td class="whitespace-nowrap text-gray-600 border border-gray-300 px-4 py-2">
-                                        {{ $log->created_at }}</td>
+                                        <div class="flex flex-row items-center justify-center gap-4">
+                                            <span>{{ $log->created_at->format('d M Y H:i') }} </span>
+                                            <span class="text-gray-300">|</span>
+                                            <span class="text-[#4F22AA]">{{ $log->created_at->diffForHumans() }}</span>
+                                        </div>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -68,13 +74,14 @@
                         [5, 10, 25, 50, -1],
                         [5, 10, 25, 50, "Semua"]
                     ],
+                    "order": [[4, "desc"]],
                     "language": {
                         "lengthMenu": "Tampilkan _MENU_ data per halaman",
                         "zeroRecords": "Data tidak ditemukan",
                         "info": "Menampilkan _START_ - _END_ dari _TOTAL_ data",
                         "infoEmpty": "Tidak ada data",
                         "infoFiltered": "(disaring dari _MAX_ total data)",
-                        "search": "Cari User: ",
+                        "search": "Cari Log: ",
                         "paginate": {
                             "first": "Awal",
                             "last": "Akhir",

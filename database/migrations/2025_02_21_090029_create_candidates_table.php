@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('vision');
             $table->text('mission');
             $table->string('image')->nullable();
+            $table->string('video_link');
             $table->unsignedBigInteger('id_position');
             $table->timestamps();
 

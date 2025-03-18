@@ -58,7 +58,7 @@
                             <div class="space-y-4">
                                 <div class="relative w-full">
                                     <i class="fa fa-qrcode absolute left-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
-                                    <input placeholder="Masukkan Kode Akses" type="textbox" name="code" id="code" 
+                                    <input placeholder="Masukkan Kode Akses" type="text" name="code" id="code" 
                                         class="text-sm w-full h-14 pl-12 placeholder:text-gray-300 border border-gray-300 focus:border-amber-500 focus:ring-amber-500 rounded-md shadow-sm" 
                                         required autocomplete="off">
                                 </div>                                
