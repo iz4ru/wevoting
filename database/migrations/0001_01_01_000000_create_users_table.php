@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('username')->unique();
             $table->string('password');
             $table->enum('role', ['admin', 'panitia']);
+            $table->string('avatar')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

@@ -14,7 +14,7 @@
                     <div class="shadow-lg w-max">
                         <a href="{{ route('position.create') }}"
                             class="font-semibold flex items-center gap-3 px-4 py-3 lg:px-6 lg:py-4 bg-[#4F22AA] text-white rounded-md hover:bg-[#3C1C8C]">
-                            <span class="text-sm lg:text-base">Tambah Posisi</span>
+                            <span class="text-sm lg:text-base">Daftarkan Posisi</span>
                             <i class="fa-solid fa-plus fa-sm lg:fa-md"></i>
                         </a>
                     </div>
@@ -91,8 +91,8 @@
                     "ordering": true,
                     "info": true,
                     "lengthMenu": [
-                        [5, 10, 25, 50, -1],
-                        [5, 10, 25, 50, "Semua"]
+                        [10, 25, 50, -1],
+                        [10, 25, 50, "Semua"]
                     ],
                     "language": {
                         "lengthMenu": "Tampilkan _MENU_ data per halaman",

@@ -24,6 +24,7 @@
                     <ul class="text-sm list-disc pl-5 mb-8">
                         <li>Pastikan email tidak sama dengan admin atau panitia lainnya.</li>
                         <li>Pastikan username yang akan diganti tidak sama dengan admin atau panitia lainnya.</li>
+                        <li>Pastikan besar file foto profil anda tidak lebih besar dari 2MB.</li>
                     </ul>
 
                     <!-- Form Update -->
@@ -43,7 +44,7 @@
                             </div>
                         @endif
 
-                        <form action="{{ route('admin.profile.update', Auth::user()->uuid) }}" method="POST">
+                        <form action="{{ route('admin.profile.update', Auth::user()->uuid) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
                             <div class="space-y-4">
@@ -82,6 +83,33 @@
                                             id="username"
                                             class="text-sm w-full h-14 pl-12 placeholder:text-gray-300 border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
                                             required autocomplete="username" value="{{ Auth::user()->username }}">
+                                    </div>
+                                </div>
+
+                                <!-- Profile Photo -->
+                                <div x-data="{ preview: '{{ $user->avatar ? asset('storage/avatars/' . $user->avatar) : '' }}' }" x-init="preview = '{{ $user->avatar ? asset('storage/avatars/' . $user->avatar) : '' }}'">
+                                    <label for="avatar" class="text-gray-500 font-medium text-sm">Foto Profil</label>
+                                    
+                                    <!-- Preview Image -->
+                                    <div class="mb-3">
+                                        <template x-if="preview">
+                                            <img :src="preview" class="w-24 h-24 object-cover rounded-full border border-gray-300 shadow-sm">
+                                        </template>
+                                    </div>
+
+                                    <!-- File Input -->
+                                    <div class="relative flex items-center border border-gray-300 rounded-md shadow-sm bg-white">
+                                        <i class="fa fa-camera text-gray-300 absolute left-4"></i>
+                                        <input type="file" name="avatar" id="avatar" accept="image/*"
+                                            @change="let file = $event.target.files[0]; 
+                                                    if (file) { 
+                                                        let reader = new FileReader(); 
+                                                        reader.onload = e => preview = e.target.result; 
+                                                        reader.readAsDataURL(file); 
+                                                    }"
+                                            class="text-sm w-full h-14 pl-12 pr-4 text-gray-500 border-none focus:ring-0 
+                                                file:mt-2.5 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 
+                                                file:bg-[#7C3AED] file:hover:bg-[#6D31D5] file:text-white file:cursor-pointer file:font-medium">
                                     </div>
                                 </div>
 

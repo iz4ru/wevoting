@@ -79,6 +79,8 @@ class AdminController extends Controller
             'password' => 'required|string|min:8|confirmed',
             'password_confirmation' => 'required|string|min:8',
             'role' => 'required',
+        ], [
+            'role.required' => '❌ Role wajib diisi!',
         ]);
 
         // Validasi data setelah username diperbaiki
@@ -107,13 +109,13 @@ class AdminController extends Controller
 
         $users = User::where('uuid', $uuid)->firstOrFail();
 
-    // Cek apakah ada user lain dengan data yang sama persis
-    $existingUser = User::where('name', $request->name)
-        ->where('email', $request->email)
-        ->where('username', $request->username)
-        // ->where('role', $request->role)
-        ->where('uuid', '!=', $uuid) // Pastikan tidak menghitung user yang sedang diupdate
-        ->exists();
+        // Cek apakah ada user lain dengan data yang sama persis
+        $existingUser = User::where('name', $request->name)
+            ->where('email', $request->email)
+            ->where('username', $request->username)
+            // ->where('role', $request->role)
+            ->where('uuid', '!=', $uuid) // Pastikan tidak menghitung user yang sedang diupdate
+            ->exists();
 
         if ($existingUser) {
             return redirect()->route('admin.mgmt')->with('success', '✅ Data user sudah ada, tidak ada perubahan yang dilakukan!');

@@ -20,9 +20,9 @@
                 <div x-data="{ open: false }" class="relative">
                     <button @click="open = !open"
                         class="w-10 h-10 bg-gray-200 rounded-full overflow-hidden">
-                        <img src="{{ Auth::user()->avatar }}" alt="Profile"
-                            class="w-full h-full object-cover"
-                            onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=7C3AED&color=fff'">
+                        <img src="{{ Storage::url('avatars/' . Auth::user()->avatar) }}" alt="Profile"
+                        class="w-full h-full object-cover"
+                        onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=7C3AED&color=fff'">
                     </button>
                     <!-- Dropdown Menu -->
                     <div x-show="open"

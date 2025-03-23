@@ -21,6 +21,7 @@
         }
     </style>
     <link rel="stylesheet" href="//cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
     @livewireStyles
     @livewireScripts
 
@@ -31,6 +32,10 @@
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
     <!-- Data Tables -->
     <script src="//cdn.datatables.net/2.2.2/js/dataTables.min.js"></script>
+    <!-- Chart -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <!-- Swiper -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
     <title>@yield('title', 'Admin') - Wevoting</title>
 </head>
@@ -58,6 +63,33 @@
         </div>
 
         <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Mendapatkan semua tombol "Lihat Selengkapnya"
+                const toggleButtons = document.querySelectorAll('.toggle-button');
+
+                // Menambahkan event listener untuk setiap tombol
+                toggleButtons.forEach(function(button) {
+                    button.addEventListener('click', function() {
+                        const shortId = this.getAttribute('data-short');
+                        const fullId = this.getAttribute('data-full');
+
+                        const shortText = document.getElementById(shortId);
+                        const fullText = document.getElementById(fullId);
+
+                        shortText.classList.toggle('hidden');
+                        fullText.classList.toggle('hidden');
+
+                        if (this.innerText === "Lihat Selengkapnya") {
+                            this.innerText = "Sembunyikan";
+                        } else {
+                            this.innerText = "Lihat Selengkapnya";
+                        }
+                    });
+                });
+            });
+        </script>
+
+        <script>
             document.querySelectorAll(".togglePassword").forEach((icon) => {
                 icon.addEventListener("click", function() {
                     const passwordInput = this.previousElementSibling; // Ambil input sebelum ikon
@@ -71,17 +103,17 @@
         </script>
 
         <script>
-            // Menghilangkan alert setelah 1 detik
             setTimeout(function() {
                 var successAlert = document.getElementById('successAlert');
                 if (successAlert) {
-                    successAlert.style.display = 'none';
+                    successAlert.remove(); // Hapus elemen dari DOM
                 }
             }, 3000);
+
             setTimeout(function() {
                 var errorAlert = document.getElementById('errorAlert');
                 if (errorAlert) {
-                    errorAlert.style.display = 'none';
+                    errorAlert.remove(); // Hapus elemen dari DOM
                 }
             }, 3000);
         </script>

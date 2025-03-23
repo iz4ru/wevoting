@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('voters', function (Blueprint $table) {
             $table->integer('user_id')->unique()->primary();
+            $table->uuid('uuid')->unique();
             $table->string('name');
             $table->string('class');
+            $table->string('vocation');
             $table->string('access_code')->unique();
             $table->enum('validation', ['sudah', 'belum'])->default('belum');
             $table->timestamps();

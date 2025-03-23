@@ -17,8 +17,8 @@ return new class extends Migration
             $table->text('work_program');
             $table->text('vision');
             $table->text('mission');
-            $table->string('image')->nullable();
-            $table->string('video_link');
+            $table->string('image');
+            $table->string('video_link')->nullable();
             $table->unsignedBigInteger('id_position');
             $table->timestamps();
 

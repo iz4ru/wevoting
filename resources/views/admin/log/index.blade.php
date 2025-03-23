@@ -71,8 +71,8 @@
                     "ordering": true,
                     "info": true,
                     "lengthMenu": [
-                        [5, 10, 25, 50, -1],
-                        [5, 10, 25, 50, "Semua"]
+                        [10, 25, 50, -1],
+                        [10, 25, 50, "Semua"]
                     ],
                     "order": [[4, "desc"]],
                     "language": {

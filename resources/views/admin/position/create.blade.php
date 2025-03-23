@@ -49,7 +49,7 @@
 
                                 <!-- Name -->
                                 <div>
-                                    <label for="name" class="text-gray-500 font-medium text-sm">Nama Posisi</label>
+                                    <label for="position_name" class="text-gray-500 font-medium text-sm">Nama Posisi</label>
                                     <div class="relative">
                                         <i class="fa fa-user-tie absolute left-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
                                         <input placeholder="Masukkan Nama Posisi" type="text" name="position_name"

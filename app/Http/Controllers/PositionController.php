@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Log;
 use App\Models\Position;
+use App\Models\Candidate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -103,10 +104,17 @@ class PositionController extends Controller
     public function deletePosition($id)
     {
         $activity = "Delete data posisi";
-        $this->logActivity($activity);   
+        $this->logActivity($activity);
 
-        $position=Position::findOrFail($id);
+        // Cek apakah posisi masih digunakan oleh kandidat
+        if (Candidate::where('id_position', $id)->exists()) {
+            return back()->with('error', '❌ Posisi ini masih digunakan oleh kandidat, tidak bisa dihapus!');
+        }
+
+        // Jika tidak digunakan, lanjutkan penghapusan
+        $position = Position::findOrFail($id);
         $position->delete();
-        return redirect()->route('position')->with('success','✅ Data berhasil dihapus!');
+
+        return redirect()->route('position')->with('success', '✅ Data berhasil dihapus!');
     }
 }

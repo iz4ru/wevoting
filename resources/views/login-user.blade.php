@@ -7,16 +7,34 @@
 
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=lexend:400,600,700,800&display=swap" rel="stylesheet" />
-    
+
     <!-- Styles -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
+    <link rel="stylesheet" href="//cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    @livewireStyles
+    @livewireScripts
 
     <!-- Script JS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="//unpkg.com/alpinejs" defer></script>
+    <!-- jQuery -->
+    <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
+    <!-- Data Tables -->
+    <script src="//cdn.datatables.net/2.2.2/js/dataTables.min.js"></script>
+    <!-- Chart -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <!-- Swiper -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
     <title>Login - Wevoting</title>
 </head>
@@ -56,7 +74,7 @@
 
                     <!-- Login Buttons -->
                     <div class="space-y-4">
-                        <a href="{{ route('users.login') }}" 
+                        <a href="{{ route('voter.login') }}" 
                            class="flex items-center justify-between w-full px-6 py-4 bg-[#FFB300] hover:bg-[#F59E00] text-white rounded-xl transition-colors">
                             <div class="text-left flex items-center gap-3">
                                 <i class="fa-solid fa-user"></i>

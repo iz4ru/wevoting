@@ -90,9 +90,9 @@
                                     <label for="role" class="text-gray-500 font-medium text-sm">Pilih Role</label>
                                     <div class="relative">
                                         <i
-                                            class="fa fa-user-shield absolute left-4 top-1/2 -translate-y-1/2 text-gray-3=400"></i>
+                                            class="fa fa-user-shield absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
                                         <select placeholder="Pilih Role Anda" type="select" name="role" id="role"
-                                            class="text-sm w-full h-14 pl-12 pr-12 bg-3=400 placeholder:text-gray-300 border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                                            class="text-sm w-full h-14 pl-12 pr-12 bg-gray-200 placeholder:text-gray-300 border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
                                             required autocomplete="off" disabled
                                             onchange="this.classList.remove('text-gray-300'); this.classList.add('text-gray-700');">
                                             <option value="" {{ $user->role === 'admin' ? 'selected' : '' }}>Admin</option>

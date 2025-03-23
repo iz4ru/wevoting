@@ -15,7 +15,10 @@
     <!-- Styles -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <title>Pemilih - Wevoting</title>
+    <!-- Script JS -->
+    <script src="//unpkg.com/alpinejs" defer></script>
+
+    <title>Users - Wevoting</title>
 </head>
 <body class="bg-[#FAFAFA] min-h-screen flex flex-col" style="background-image: url('{{ asset('img/bg-login.png') }}'); background-size: cover; background-position: center;">
     <div class="flex-1 flex flex-col">
@@ -44,7 +47,7 @@
                     <!-- Welcome Text -->
                     <div class="text-left mb-4">
                         <h1 class="text-4xl font-bold text-gray-700 mb-2">
-                            Pilihlah Pemimpin <br>  Barumu!
+                            Pilihlah Pemimpin Barumu!
                         </h1>
                         <p class="text-md text-gray-500">
                             Sudah punya kode akses? Yuk, masuk!
@@ -53,21 +56,66 @@
 
                     <!-- Login Form -->
                     <div class="">
-                        <form action="#" method="POST" onsubmit="validateForm(event)">
+                        <form wire:submit='login' action="{{ route('voter.login') }}" method="POST" onsubmit="validateForm(event)">
                             @csrf
                             <div class="space-y-4">
                                 <div class="relative w-full">
                                     <i class="fa fa-qrcode absolute left-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
-                                    <input placeholder="Masukkan Kode Akses" type="text" name="code" id="code" 
-                                        class="text-sm w-full h-14 pl-12 placeholder:text-gray-300 border border-gray-300 focus:border-amber-500 focus:ring-amber-500 rounded-md shadow-sm" 
+                                    <input placeholder="Masukkan Kode Akses" type="text" name="access_code"
+                                        id="access_code"
+                                        class="text-sm w-full h-14 pl-12 placeholder:text-gray-300 border border-gray-300 focus:border-amber-500 focus:ring-amber-500 rounded-md shadow-sm"
                                         required autocomplete="off">
-                                </div>                                
+                                </div>
                             </div>
-                            
+
+                                @if(session('success'))
+                                <div class="alert alert-success alert-dismissible fade show text-sm py-2 px-4 mt-4 bg-green-100 text-green-500 border border-green-500 rounded-md" role="alert" id="successAlert">
+                                    <p>{{ session('success') }}</p>
+                                </div>
+                                @endif          
+
+                                @if(session('error'))
+                                <div class="alert alert-error alert-dismissible fade show text-sm py-2 px-4 mt-4 bg-red-100 text-red-500 border border-red-500 rounded-md" role="alert" id="errorAlert">
+                                    <p>{{ session('error') }}</p>
+                                </div>
+                                @endif                        
+                                
+                                <script>
+                                    const passwordInput = document.getElementById("password");
+                                    const togglePassword = document.getElementById("togglePassword");
+                                
+                                    togglePassword.addEventListener("click", function () {
+                                        if (passwordInput.type === "password") {
+                                            passwordInput.type = "text";
+                                            this.classList.replace("fa-eye", "fa-eye-slash"); // Ganti ikon jadi 'mata tertutup'
+                                        } else {
+                                            passwordInput.type = "password";
+                                            this.classList.replace("fa-eye-slash", "fa-eye"); // Balikin ke 'mata terbuka'
+                                        }
+                                    });
+                                </script>
+
+                                <script>
+                                    // Menghilangkan alert setelah 1 detik
+                                    setTimeout(function() {
+                                        var successAlert = document.getElementById('successAlert');
+                                        if (successAlert) {
+                                            successAlert.style.display = 'none';
+                                        }
+                                    }, 3000);
+                                    setTimeout(function() {
+                                        var errorAlert = document.getElementById('errorAlert');
+                                        if (errorAlert) {
+                                            errorAlert.style.display = 'none';
+                                        }
+                                    }, 3000);
+                                </script>
+                            </div>
+
                             <!-- Login Buttons -->
                             <div class="space-y-4 mt-4">
                                 <button type="submit" 
-                                   class="flex items-center justify-center w-full px-6 py-4 bg-[#FFB300] hover:bg-[#F59E00] text-white rounded-xl transition-colors">
+                                    class="flex items-center justify-center w-full px-6 py-4 bg-[#FFB300] hover:bg-[#C78D04] text-white rounded-xl transition-colors">
                                     <div class="text-center flex items-center gap-3">
                                         <span class="font-semibold">Masuk</span>
                                         <i class="fa-solid fa-chevron-right"></i>
@@ -82,7 +130,7 @@
 
         <!-- Footer -->
         <div class="py-6 text-center text-gray-500 text-sm">
-            © Wevoting 2025 by iz4ru
+            &copy; Wevoting 2025 by iz4ru
         </div>
     </div>
 </body>
