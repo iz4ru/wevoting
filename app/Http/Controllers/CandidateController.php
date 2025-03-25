@@ -49,6 +49,11 @@ class CandidateController extends Controller
     {
         $x['subtitle'] = 'Form Create Candidate';
         $positions = Position::all();
+
+        if (Auth::user()->role == 'panitia') {
+            abort(403, 'Unauthorized');
+        }
+
         return view('admin.candidate.create', compact('positions'), $x);
     }
 
@@ -65,7 +70,7 @@ class CandidateController extends Controller
                 'mission' => 'required|string',
                 'image' => 'required|image|mimes:png,jpg,jpeg|max:2048', // Standardized to 2MB
                 'video_link' => 'required|string',
-                'id_position' => 'required|exists:positions,id',
+                'position_name' => 'required|string|max:255',
             ],
             [
                 'name.required' => '❌ Nama kandidat harus diisi',
@@ -77,8 +82,7 @@ class CandidateController extends Controller
                 'image.mimes' => '❌ Format gambar harus PNG atau JPG',
                 'image.max' => '❌ Ukuran gambar maksimal 2MB',
                 'video_link.required' => '❌ Link video kampanye harus diisi',
-                'id_position.required' => '❌ Posisi harus dipilih',
-                'id_position.exists' => '❌ Posisi yang dipilih tidak valid',
+                'position_name.required' => '❌ Berikan nama posisi kandidat ini!',
             ],
         );
 
@@ -91,10 +95,17 @@ class CandidateController extends Controller
             );
         }
 
-        if (Candidate::where('id_position', $request->id_position)->exists()) {
+        $existingPosition = Position::where('position_name', $validated['position_name'])->first();
+
+        if ($existingPosition) {
             return back()->with('error', '❌ Data posisi ini sudah terdaftar, silahkan memakai nama posisi yang lain!');
         }
 
+        // Cek apakah posisi sudah ada, jika belum buat posisi baru
+        $position = Position::create([
+            'position_name' => $validated['position_name']
+        ]);
+        
         // Buat kandidat
         $candidate = new Candidate();
         $candidate->name = $validated['name'];
@@ -102,7 +113,7 @@ class CandidateController extends Controller
         $candidate->vision = $validated['vision'];
         $candidate->mission = $validated['mission'];
         $candidate->video_link = $validated['video_link'];
-        $candidate->id_position = $validated['id_position'];
+        $candidate->id_position = $position->id;
 
         // Jika ada gambar yang diunggah
         if ($request->hasFile('image')) {   
@@ -131,6 +142,11 @@ class CandidateController extends Controller
         $x['subtitle'] ='Form Update Kandidat';
         $candidate = Candidate::findOrFail($id);
         $positions = Position::all();
+
+        if (Auth::user()->role == 'panitia') {
+            abort(403, 'Unauthorized');
+        }
+
         return view('admin.candidate.update',compact('candidate','positions'), $x);
     }
 
@@ -245,6 +261,11 @@ class CandidateController extends Controller
         $x['subtitle'] = 'Detail Kandidat';
         $candidate = Candidate::findOrFail($id);
         $positions = Position::all();
+
+        if (Auth::user()->role == 'panitia') {
+            abort(403, 'Unauthorized');
+        }
+
         return view('admin.candidate.preview', compact('candidate', 'positions'), $x);
     }
 

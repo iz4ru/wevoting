@@ -41,6 +41,11 @@ class PositionController extends Controller
     public function createPosition()
     {
         $x['subtitle'] ='Form Insert Posisi';
+
+        if (Auth::user()->role == 'panitia') {
+            abort(403, 'Unauthorized');
+        }
+
         return view('admin.position.create',$x);
     }
 
@@ -68,6 +73,11 @@ class PositionController extends Controller
     {
         $x['subtitle'] ='Form Update Posisi';
         $x['position'] = Position::findOrFail($id);
+
+        if (Auth::user()->role == 'panitia') {
+            abort(403, 'Unauthorized');
+        }
+
         return view('admin.position.update',$x);
     }
 

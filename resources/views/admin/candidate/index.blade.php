@@ -9,16 +9,18 @@
                 <div class="bg-[#926AE1]/20 rounded-lg shadow-lg p-6">
                     <div class="">
                         <h1 class="text-2xl lg:text-3xl font-bold text-[#4F22AA] mb-2">Data Kandidat</h1>
-                        <p class="text-sm text-[#4F22AA] mb-4 lg:text-base">Tambahkan data kandidat atau manajemen kandidat.
+                        <p class="text-sm text-[#4F22AA] lg:text-base">Tambahkan data kandidat atau manajemen kandidat.
                         </p>
                     </div>
-                    <div class="shadow-lg w-max">
+                    @if (Auth::user()->role == 'admin')
+                        <div class="shadow-lg w-max mt-4">
                         <a href="{{ route('candidate.create') }}"
                             class="font-semibold flex items-center gap-3 px-4 py-3 lg:px-6 lg:py-4 bg-[#4F22AA] text-white rounded-md hover:bg-[#3C1C8C]">
                             <span class="text-sm lg:text-base">Daftarkan Kandidat</span>
                             <i class="fa-solid fa-user-plus fa-sm lg:fa-md"></i>
                         </a>
                     </div>
+                    @endif
                 </div>
                 <hr class="rounded border-t-2 border-[#B8B8B8]/50 my-8 mx-6">
 
@@ -85,6 +87,7 @@
                                                         </span>
                                                     </div>
                                                     <!-- Action Bar -->
+                                                    @if (Auth::user()->role == 'admin')
                                                     <div class="grid grid-cols-3 gap-3">
                                                         <a href="{{ route('candidate.show', $candidate->id) }}">
                                                             <div
@@ -168,6 +171,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -209,7 +213,7 @@
                                         </div>
                                         <!-- Progress Bar -->
                                         <div
-                                            class="bg-[#22A06B]/20 hover:bg-[#22A06B] text-[#22A06B] hover:text-white backdrop-blur-lg shadow-md rounded-md p-2 mb-4 flex items-center justify-center gap-2 transform transition ease-in-out">
+                                            class="bg-[#22A06B]/20 hover:bg-[#22A06B] text-[#22A06B] hover:text-white backdrop-blur-lg shadow-md rounded-md p-2 flex items-center justify-center gap-2 transform transition ease-in-out">
                                             <i class="fa-solid fa-chart-bar fa-lg lg:fa-xl"></i>
                                             <span class="text-base font-semibold">Perolehan Suara:
                                                 <span class="font-bold">
@@ -222,7 +226,8 @@
                                             </span>
                                         </div>
                                         <!-- Action Bar -->
-                                        <div class="grid grid-cols-3 gap-3">
+                                        @if (Auth::user()->role == 'admin')
+                                        <div class="grid grid-cols-3 gap-3 mt-4">
                                             <a href="{{ route('candidate.show', $candidate->id) }}">
                                                 <div
                                                     class="bg-[#1D7AFC]/20 hover:bg-[#1D7AFC] text-[#1D7AFC] hover:text-white backdrop-blur-lg shadow-md rounded-md p-2 mb-3 flex items-center justify-center gap-2 transform transition ease-in-out">
@@ -305,6 +310,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

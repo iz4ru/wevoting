@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Log;
 use App\Models\Voter;
 use App\Models\Election;
 use App\Models\Position;
@@ -19,22 +20,63 @@ class VotingController extends Controller
         return view('users.dashboard', $x);
     }
 
-    public function toggleElectionSession(Request $request)
+    public function logActivity($activity)
+    {
+        $user = Auth::user();
+        $username = $user->username;
+        $role = null;
+
+        if ($user->role === 'admin') {
+            $role = 'Admin';
+        } elseif ($user->role === 'panitia') {
+            $role = 'Admin';
+        }
+
+        $log = new Log([
+            'username' => $username,
+            'activity' => $activity,
+            'role' => $role,
+        ]);
+
+        $log->save();
+    }
+
+    public function startElectionSession()
     {
         // Cek apakah ada election, jika tidak ada maka buat baru
         $election = Election::first();
-        
+    
         if (!$election) {
             $election = Election::create([
-                'is_active' => 0 // Default sesi pemilihan dimulai dalam keadaan mati
+                'is_active' => 1 // Sesi pemilihan langsung aktif saat dibuat
             ]);
+        } else {
+            $election->is_active = 1;
+            $election->save();
         }
     
-        // Update status is_active berdasarkan input form
-        $election->is_active = $request->input('is_active', 0);
+        $activity = 'Memulai sesi pemilihan';
+        $this->logActivity($activity);
+    
+        return back()->with('success', '🗳️✅ Sesi pemilihan telah dimulai.');
+    }
+    
+    public function stopElectionSession()
+    {
+        // Cek apakah ada election
+        $election = Election::first();
+    
+        if (!$election) {
+            return back()->with('error', '❌ Tidak ada sesi pemilihan yang aktif.');
+        }
+    
+        $election->is_active = 0;
         $election->save();
     
-        return back()->with('success', $election->is_active ? '🗳️✅ Sesi pemilihan telah dimulai.' : '🗳️⛔ Sesi pemilihan telah ditutup.');
+        $activity = 'Mematikan sesi pemilihan';
+        $this->logActivity($activity);
+    
+        return back()->with('success', '🗳️⛔ Sesi pemilihan telah ditutup.');
     }
     
     public function previewCandidate($id)

@@ -56,6 +56,11 @@ class VoterController extends Controller
     public function showImportVoter()
     {
         $x['subtitle'] = 'Import Voter';
+
+        if (Auth::user()->role == 'panitia') {
+            abort(403, 'Unauthorized');
+        }
+
         return view('admin.voter.import', $x);
     }
 
@@ -102,6 +107,11 @@ class VoterController extends Controller
     public function createVoter()
     {
         $x['subtitle'] = 'Create Voter';
+
+        if (Auth::user()->role == 'panitia') {
+            abort(403, 'Unauthorized');
+        }
+
         return view('admin.voter.create', $x);
     }
 
@@ -159,6 +169,11 @@ class VoterController extends Controller
     {
         $x['voter'] = Voter::where('uuid', $uuid)->firstOrFail();
         $x['subtitle'] = 'Update Voter';
+
+        if (Auth::user()->role == 'panitia') {
+            abort(403, 'Unauthorized');
+        }
+
         return view('admin.voter.update', $x);
     }
 

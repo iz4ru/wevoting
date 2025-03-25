@@ -20,7 +20,9 @@
                     <p>{{ session('error') }}</p>
                 </div>
             @endif
+
             <!-- Election Session Toggle -->
+            @if (Auth::user()->role == 'admin')
             <div class="bg-white/30 backdrop-blur-lg rounded-xl shadow-lg p-6">
                 <div class="flex justify-between items-center">
                     <div class="flex items-center gap-4">
@@ -32,24 +34,39 @@
                             <p class="text-sm text-gray-500">Aktifkan dengan sekali klik</p>
                         </div>
                     </div>
-                    <label class="relative inline-flex items-center cursor-pointer">
-                        <form action="{{ route('toggle.election') }}" method="POST" id="toggle-form">
+            
+                    @php
+                        $election = App\Models\Election::first();
+                    @endphp
+            
+                    @if ($election && $election->is_active)
+                        <!-- Jika aktif, tampilkan tombol untuk mematikan sesi -->
+                        <form action="{{ route('election.stop') }}" method="GET" id="stop-form">
                             @csrf
-                            @php
-                                $election = App\Models\Election::first();
-                            @endphp
-                            <input type="hidden" name="is_active" value="0">
-                            <input type="checkbox" id="election-toggle" name="is_active" value="1" class="sr-only peer"
-                                onchange="document.getElementById('toggle-form').submit();"
-                                {{ $election && $election->is_active ? 'checked' : '' }}> <!-- Cek status dari database -->
-                            <div class="w-14 h-7 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full 
-                                peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white 
-                                after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-[#7C3AED]">
-                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" class="sr-only peer" checked onchange="document.getElementById('stop-form').submit();">
+                                <div class="w-14 h-7 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full 
+                                    peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white 
+                                    after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-[#7C3AED]">
+                                </div>
+                            </label>
                         </form>
-                    </label>
+                    @else
+                        <!-- Jika tidak aktif, tampilkan tombol untuk memulai sesi -->
+                        <form action="{{ route('election.start') }}" method="GET" id="start-form">
+                            @csrf
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" class="sr-only peer" onchange="document.getElementById('start-form').submit();">
+                                <div class="w-14 h-7 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full 
+                                    peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white 
+                                    after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-[#7C3AED]">
+                                </div>
+                            </label>
+                        </form>
+                    @endif
                 </div>
-            </div>
+            </div>            
+            @endif
 
             <!-- Statistics Cards -->
             <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6">

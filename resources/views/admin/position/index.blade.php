@@ -9,15 +9,18 @@
                 <div class="bg-[#926AE1]/20 rounded-lg shadow-lg p-6">
                     <div class="">
                         <h1 class="text-2xl lg:text-3xl font-bold text-[#4F22AA] mb-2">Tabel Data Posisi</h1>
-                        <p class="text-sm text-[#4F22AA] mb-4 lg:text-base">Tambahkan data posisi untuk kandidat atau manajemen posisi.</p>
+                        <p class="text-sm text-[#4F22AA] lg:text-base">Tambahkan data posisi untuk kandidat atau manajemen
+                            posisi.</p>
                     </div>
-                    <div class="shadow-lg w-max">
-                        <a href="{{ route('position.create') }}"
-                            class="font-semibold flex items-center gap-3 px-4 py-3 lg:px-6 lg:py-4 bg-[#4F22AA] text-white rounded-md hover:bg-[#3C1C8C]">
-                            <span class="text-sm lg:text-base">Daftarkan Posisi</span>
-                            <i class="fa-solid fa-plus fa-sm lg:fa-md"></i>
-                        </a>
-                    </div>
+                    @if (Auth::user()->role == 'admin')
+                        <div class="shadow-lg w-max mt-4">
+                            <a href="{{ route('position.create') }}"
+                                class="font-semibold flex items-center gap-3 px-4 py-3 lg:px-6 lg:py-4 bg-[#4F22AA] text-white rounded-md hover:bg-[#3C1C8C]">
+                                <span class="text-sm lg:text-base">Daftarkan Posisi</span>
+                                <i class="fa-solid fa-plus fa-sm lg:fa-md"></i>
+                            </a>
+                        </div>
+                    @endif
                 </div>
                 <hr class="rounded border-t-2 border-[#B8B8B8]/50 my-8 mx-6">
 
@@ -42,10 +45,14 @@
                             <tr>
                                 <th class="whitespace-nowrap text-[#4F22AA] border border-gray-300 px-4 py-2 text-center">No
                                 </th>
-                                <th class="whitespace-nowrap text-[#4F22AA] border border-gray-300 px-4 py-2 text-left">Nama Posisi
+                                <th class="whitespace-nowrap text-[#4F22AA] border border-gray-300 px-4 py-2 text-left">Nama
+                                    Posisi
                                 </th>
-                                <th class="whitespace-nowrap text-[#4F22AA] border border-gray-300 px-4 py-2 text-center">
-                                    Aksi</th>
+                                @if (Auth::user()->role == 'admin')
+                                    <th
+                                        class="whitespace-nowrap text-[#4F22AA] border border-gray-300 px-4 py-2 text-center">
+                                        Aksi</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -58,23 +65,25 @@
                                     </td>
                                     <td class="whitespace-nowrap text-gray-600 border border-gray-300 px-4 py-2">
                                         {{ $position->position_name }}</td>
-                                    <td class="whitespace-nowrap text-gray-600 border border-gray-300 px-4 py-2">
-                                        <div class="flex justify-center items-center gap-2">
-                                            <a href="{{ route('position.show', $position->id) }}"
-                                                class="text-[#4A95FD] hover:bg-[#4A95FD] hover:text-white rounded-md px-2 py-1">
-                                                <i class="fa-solid fa-pen-to-square"></i>
-                                            </a>
-                                            <span class="text-gray-300">|</span>
-                                            <form action="{{ route('position.delete', $position->id) }}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button
-                                                    class="text-[#E24A36] hover:bg-[#E24A36] hover:text-white rounded-md px-2 py-1">
-                                                    <i class="fa-solid fa-trash"></i>
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </td>
+                                    @if (Auth::user()->role == 'admin')
+                                        <td class="whitespace-nowrap text-gray-600 border border-gray-300 px-4 py-2">
+                                            <div class="flex justify-center items-center gap-2">
+                                                <a href="{{ route('position.show', $position->id) }}"
+                                                    class="text-[#4A95FD] hover:bg-[#4A95FD] hover:text-white rounded-md px-2 py-1">
+                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                </a>
+                                                <span class="text-gray-300">|</span>
+                                                <form action="{{ route('position.delete', $position->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button
+                                                        class="text-[#E24A36] hover:bg-[#E24A36] hover:text-white rounded-md px-2 py-1">
+                                                        <i class="fa-solid fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    @endif
                                 </tr>
                             @endforeach
                         </tbody>

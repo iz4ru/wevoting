@@ -29,7 +29,8 @@ Route::middleware('auth') -> group(function(){
     Route::get('dashboard-update', [HomeController::class, 'dashboardUpdate'])->name('dashboard.update');
 
     # Toggle On / Off Election
-    Route::post('/toggle-election-session', [VotingController::class, 'toggleElectionSession'])->name('toggle.election');
+    Route::get('/election/start', [VotingController::class, 'startElectionSession'])->name('election.start');
+    Route::get('/election/stop', [VotingController::class, 'stopElectionSession'])->name('election.stop');
 
     # Logout Session
     Route::post('auth/admin/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');

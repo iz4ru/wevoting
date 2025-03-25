@@ -9,11 +9,12 @@
                 <div class="bg-[#926AE1]/20 rounded-lg shadow-lg p-6">
                     <div class="">
                         <h1 class="text-2xl lg:text-3xl font-bold text-[#4F22AA] mb-2">Tabel Data Pemilih</h1>
-                        <p class="text-sm text-[#4F22AA] mb-4 lg:text-base">Tambahkan data pemilih untuk kandidat atau
+                        <p class="text-sm text-[#4F22AA] lg:text-base">Tambahkan data pemilih untuk kandidat atau
                             manajemen pemilih.</p>
                     </div>
 
-                    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-4 ">
+                    @if (Auth::user()->role == 'admin')
+                    <div class="mt-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-4 ">
                         <div class="flex flex-col">
                             <div class="flex flex-col sm:flex-row gap-3 md:gap-4">
                                 <div class="shadow-lg w-max">
@@ -128,6 +129,7 @@
                             </div>
                         </div>
                     </div>
+                    @endif
 
 
                 </div>
@@ -172,8 +174,10 @@
                                 <th class="whitespace-nowrap text-[#4F22AA] border border-gray-300 px-4 py-2 text-left">
                                     Status Vote
                                 </th>
-                                <th class="whitespace-nowrap text-[#4F22AA] border border-gray-300 px-4 py-2 text-center">
+                                @if (Auth::user()->role == 'admin')
+                                    <th class="whitespace-nowrap text-[#4F22AA] border border-gray-300 px-4 py-2 text-center">
                                     Aksi</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -202,6 +206,7 @@
                                             -
                                         @endif
                                     </td>
+                                    @if (Auth::user()->role == 'admin')
                                     <td class="whitespace-nowrap text-gray-600 border border-gray-300 px-4 py-2">
                                         <div class="flex justify-center items-center gap-2">
                                             <a href="{{ route('voter.show', $voter->uuid) }}"
@@ -260,6 +265,7 @@
                                             </div>
                                         </div>
                                     </td>
+                                    @endif
                                 </tr>
                             @endforeach
                         </tbody>

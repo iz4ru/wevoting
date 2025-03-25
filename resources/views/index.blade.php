@@ -203,13 +203,20 @@
 
                                                 <!-- Video Section -->
                                                 <div class="mt-6 w-full">
-                                                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Video
-                                                        Kampanye</h3>
-                                                    <iframe src="{{ $candidate->video_link }}" frameborder="0"
-                                                        class="w-full aspect-video bg-gray-200 rounded-lg flex items-center justify-center">
-                                                        <span class="text-gray-400">Video Placeholder</span>
-                                                    </iframe>
+                                                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Video Kampanye
+                                                    </h3>
+                                                    @if (!empty($candidate->video_link) && filter_var($candidate->video_link, FILTER_VALIDATE_URL))
+                                                        <iframe src="{{ $candidate->video_link }}" frameborder="0"
+                                                            class="w-full aspect-video bg-gray-200 rounded-lg flex items-center justify-center">
+                                                        </iframe>
+                                                    @else
+                                                        <div
+                                                            class="w-full aspect-video bg-gray-200 rounded-lg flex items-center justify-center text-gray-600">
+                                                            <p>Maaf, Video Sedang Tidak Tersedia</p>
+                                                        </div>
+                                                    @endif
                                                 </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -219,11 +226,11 @@
                             <div class="swiper-pagination relative mt-4"></div>
                             <!-- Custom Navigation Buttons -->
                             <div
-                                class="custom-swiper-button-prev absolute left-0 top-1/2 pr-4 transform -translate-y-1/2 z-10 text-[#4F22AA] w-10 h-10 rounded-full flex items-center justify-center cursor-pointer">
+                                class="custom-swiper-button-prev absolute left-0 top-1/2 transform -translate-y-1/2 z-10 text-[#4F22AA] w-10 h-10 rounded-full flex items-center justify-center cursor-pointer">
                                 <i class="fa-solid fa-chevron-left"></i>
                             </div>
                             <div
-                                class="custom-swiper-button-next absolute right-0 top-1/2 pl-4 transform -translate-y-1/2 z-10 text-[#4F22AA] w-10 h-10 rounded-full flex items-center justify-center cursor-pointer">
+                                class="custom-swiper-button-next absolute right-0 top-1/2 transform -translate-y-1/2 z-10 text-[#4F22AA] w-10 h-10 rounded-full flex items-center justify-center cursor-pointer">
                                 <i class="fa-solid fa-chevron-right"></i>
                             </div>
                         </div>
@@ -301,39 +308,71 @@
 </body>
 
 <style>
-    /* Hide default Swiper navigation buttons */
-    .swiper-button-next,
-    .swiper-button-prev {
-        display: none;
+    /* Enhanced positioning for swiper buttons to appear on sides of candidate images */
+    .custom-swiper-button-prev,
+    .custom-swiper-button-next {
+        position: absolute;
+        z-index: 10;
+        width: 40px;
+        height: 40px;
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: #4F22AA;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
     }
 
-    /* Force single slide view */
-    .candidate-swiper-container {
-        overflow: hidden;
-        position: relative;
+    .custom-swiper-button-prev:hover,
+    .custom-swiper-button-next:hover {
+        background-color: #4F22AA;
+        color: white;
     }
 
-    .candidate-swiper .swiper-slide {
-        width: 100% !important;
-        flex-shrink: 0;
+    /* Position buttons at the image level instead of at the top level */
+    .custom-swiper-button-prev {
+        left: 35px;
+        top: 300px;
+        /* This will be adjusted by JS to match image position */
     }
 
-    /* Fix for Swiper on larger screens */
-    @media (min-width: 640px) {
-        .candidate-swiper .swiper-wrapper {
-            display: flex;
-        }
+    .custom-swiper-button-next {
+        right: 35px;
+        top: 300px;
+        /* This will be adjusted by JS to match image position */
+    }
 
-        .candidate-swiper .swiper-slide {
-            width: 100% !important;
-            flex: 0 0 100%;
-            max-width: 100%;
+    /* Maintain responsiveness */
+    @media (max-width: 640px) {
+
+        .custom-swiper-button-prev,
+        .custom-swiper-button-next {
+            width: 35px;
+            height: 35px;
+            top: 220px;
+            /* Adjust for smaller screens */
         }
     }
 </style>
 
+<style>
+    /* Styling untuk menyembunyikan slide yang tidak aktif */
+    .swiper-slide {
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+
+    .swiper-slide-active {
+        opacity: 1;
+        visibility: visible;
+    }
+</style>
+
 <script>
-    // Alpine.js component for the carousel
     function candidateCarousel() {
         return {
             swiper: null,
@@ -377,6 +416,10 @@
                                 setTimeout(() => {
                                     this.update();
                                 }, 100);
+                            },
+                            slideChange: function() {
+                                // Swiper akan otomatis menambahkan class swiper-slide-active
+                                // pada slide yang aktif, dan CSS kita akan menangani visibilitas
                             }
                         }
                     });
