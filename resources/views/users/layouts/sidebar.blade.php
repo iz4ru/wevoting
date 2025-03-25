@@ -7,7 +7,7 @@
 <div class="flex h-screen relative z-10">
     <!-- Sidebar with Glassmorphism - Fixed position -->
     <div id="sidebar"
-        class="fixed w-72 h-screen bg-white-30 backdrop-blur-lg text-white flex flex-col shadow-lg z-30 transform transition-transform duration-300 ease-in-out sidebar-cloak">
+        class="fixed w-72 h-screen rounded-xl bg-white-30 backdrop-blur-lg text-white flex flex-col shadow-lg z-30 transform transition-transform duration-300 ease-in-out sidebar-cloak">
         <!-- Logo -->
         <div class="p-10 flex items-center gap-3 border-b border-white/10">
             <div class="w-10 h-10 flex items-center justify-center rounded">

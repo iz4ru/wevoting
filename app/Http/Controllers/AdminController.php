@@ -12,13 +12,17 @@ use Illuminate\Support\Facades\Hash;
 class AdminController extends Controller
 {
     public function index()
-    {   
+    {
         $x['users'] = User::where('id', '!=', Auth::id())->get(); // Filter user yang sedang login
         $x['subtitle'] = 'Admin User Data';
-        
+
+        if (Auth::user()->role == 'panitia') {
+            abort(403, 'Unauthorized');
+        }
+
         return view('admin.management.index', $x);
+
     }
-    
 
     public function logActivity($activity)
     {
@@ -44,6 +48,11 @@ class AdminController extends Controller
     public function createAdmin()
     {
         $x['subtitle'] = 'Create User';
+
+        if (Auth::user()->role == 'panitia') {
+            abort(403, 'Unauthorized');
+        }
+
         return view('admin.management.create', $x);
     }
 
@@ -51,7 +60,33 @@ class AdminController extends Controller
     {
         // dd($request->all());
 
-        $activity = "Membuat user baru";
+        $validatedData = $request->validate(
+            [
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users',
+                'password' => 'required|string|min:8|confirmed',
+                'password_confirmation' => 'required|string|min:8',
+                'role' => 'required',
+            ],
+            [
+                'role.required' => '❌ Role wajib diisi!',
+            ],
+        );
+
+        // Maksimal jumlah admin dan panitia
+        $maxAdmin = 3;
+        $maxPanitia = 10;
+
+        $adminCount = User::where('role', 'admin')->count();
+        $panitiaCount = User::where('role', 'panitia')->count();
+
+        if (($request->role === 'admin' && $adminCount >= $maxAdmin) ||
+        ($request->role === 'panitia' && $panitiaCount >= $maxPanitia)) 
+        {
+            return back()->with('error', '❌ Jumlah ' . $request->role . ' sudah mencapai batas maksimum!');
+        }
+
+        $activity = 'Membuat user baru';
         $this->logActivity($activity);
 
         if (User::where('email', $request->email)->exists()) {
@@ -73,16 +108,6 @@ class AdminController extends Controller
             $counter++;
         }
 
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-            'password_confirmation' => 'required|string|min:8',
-            'role' => 'required',
-        ], [
-            'role.required' => '❌ Role wajib diisi!',
-        ]);
-
         // Validasi data setelah username diperbaiki
         $validatedData['username'] = $username; // Gunakan username yang sudah diperbaiki
 
@@ -101,12 +126,16 @@ class AdminController extends Controller
     {
         $x['user'] = User::where('uuid', $uuid)->firstOrFail();
         $x['subtitle'] = 'Update User';
+
+        if (Auth::user()->role == 'panitia') {
+            abort(403, 'Unauthorized');
+        }
+
         return view('admin.management.update', $x);
     }
 
     public function updateAdmin(Request $request, $uuid)
     {
-
         $users = User::where('uuid', $uuid)->firstOrFail();
 
         // Cek apakah ada user lain dengan data yang sama persis
@@ -120,8 +149,8 @@ class AdminController extends Controller
         if ($existingUser) {
             return redirect()->route('admin.mgmt')->with('success', '✅ Data user sudah ada, tidak ada perubahan yang dilakukan!');
         }
-        
-        $activity = "Mengupdate data user";
+
+        $activity = 'Mengupdate data user';
         $this->logActivity($activity);
 
         // Cek apakah email sudah digunakan oleh user lain
@@ -152,44 +181,47 @@ class AdminController extends Controller
 
     public function deleteAdmin(Request $request, $uuid)
     {
-        // Hitung jumlah admin yang tersisa
-        $adminCount = User::where('role', 'admin')->count();
-    
-        // Cek apakah admin yang tersisa hanya satu
-        if ($adminCount <= 1) {
-            return back()->with('error', '❌ Tidak bisa menghapus user, karena hanya ada 1 admin yang tersisa!');
-        }
-    
+        // Cari user berdasarkan UUID
         $user = User::where('uuid', $uuid)->firstOrFail();
 
+        // Hitung jumlah admin dan panitia secara terpisah
+        $adminCount = User::where('role', 'admin')->count();
+        $panitiaCount = User::where('role', 'panitia')->count();
+
+        // Cek apakah user yang ingin dihapus adalah satu-satunya di perannya
+        if (($user->role === 'admin' && $adminCount <= 1) || ($user->role === 'panitia' && $panitiaCount <= 1)) {
+            return back()->with('error', '❌ Tidak bisa menghapus user, karena hanya ada 1 ' . $user->role . ' yang tersisa!');
+        }
+
+        // Validasi konfirmasi password
         $request->validate([
             'password_confirmation' => 'required',
         ]);
-    
-        // Cek apakah password_confirmation dikirim
-        if (!$request->filled('password_confirmation')) {
-            return back()->with('error', '❌ Konfirmasi password wajib diisi!');
-        }
-    
-        // Debugging: Cek apakah password_confirmation terkirim dan cocok
+
+        // Cek apakah password_confirmation dikirim dan cocok
         if (!Hash::check($request->password_confirmation, $user->password)) {
             return back()->with('error', '❌ Password konfirmasi tidak cocok!');
         }
-    
+
         // Jika lolos semua pengecekan, hapus user
-        $activity = "Delete data user";
+        $activity = 'Delete data user';
         $this->logActivity($activity);
-        
+
         $user->delete();
-        
+
         return redirect()->route('admin.mgmt')->with('success', '✅ User berhasil dihapus!');
     }
 
     public function formAdminPassword($uuid)
     {
-        $x['subtitle'] ='Update Password Users';
-        $x['user']=User::where('uuid', $uuid)->firstOrFail();
-        return view('admin.management.change_password',$x);
+        $x['subtitle'] = 'Update Password Users';
+        $x['user'] = User::where('uuid', $uuid)->firstOrFail();
+
+        if (Auth::user()->role == 'panitia') {
+            abort(403, 'Unauthorized');
+        }
+
+        return view('admin.management.change_password', $x);
     }
 
     public function changeAdminPassword(Request $request, $uuid)
@@ -201,8 +233,8 @@ class AdminController extends Controller
         } elseif (strlen($request->password) < 8) {
             return back()->with('error', '❌ Password baru minimal 8 karakter!');
         }
-        
-        $activity = "Update Password user";
+
+        $activity = 'Update password user';
         $this->logActivity($activity);
 
         $request->validate([
@@ -215,15 +247,15 @@ class AdminController extends Controller
         if (!$request->filled('password_current')) {
             return back()->with('error', '❌ Konfirmasi password wajib diisi!');
         }
-    
+
         // Debugging: Cek apakah password_current terkirim dan cocok
         if (!Hash::check($request->password_current, $user->password)) {
             return back()->with('error', '❌ Password tidak cocok!');
         }
-            
-        $user->password =Hash::make($request->password);
+
+        $user->password = Hash::make($request->password);
         $user->save();
 
-        return redirect()->route('admin.mgmt')->with('success','✅ Password user berhasil diupdate!');        
+        return redirect()->route('admin.mgmt')->with('success', '✅ Password user berhasil diupdate!');
     }
 }

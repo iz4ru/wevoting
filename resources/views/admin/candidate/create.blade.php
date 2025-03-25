@@ -9,7 +9,8 @@
                 <div class="bg-[#926AE1]/20 rounded-lg shadow-lg p-6">
                     <div class="">
                         <h1 class="text-2xl lg:text-3xl font-bold text-[#4F22AA] mb-2">Tambahkan Kandidat</h1>
-                        <p class="text-sm text-[#4F22AA] lg:text-base">Tambahkan kandidat baru dengan informasi lengkap untuk pemilihan.</p>
+                        <p class="text-sm text-[#4F22AA] lg:text-base">Tambahkan kandidat baru dengan informasi lengkap untuk
+                            pemilihan.</p>
                     </div>
                 </div>
                 <hr class="rounded border-t-2 border-[#B8B8B8]/50 my-8 mx-6">
@@ -23,7 +24,8 @@
 
                     <ul class="text-sm list-disc pl-5 mb-8">
                         <li>Pastikan pilihan posisi tidak sama dengan kandidat yang lainnya.</li>
-                        <li>Pastikan link video kampanye berasal dari <span class="text-red-500 underline">YouTube</span> dengan menggunakan embed link.</li>
+                        <li>Pastikan link video kampanye berasal dari <span class="text-red-500 underline">YouTube</span>
+                            dengan menggunakan embed link.</li>
                         <li>Contoh Link: <span class="text-blue-500">"https://www.youtube.com/embed/..."</span></li>
                     </ul>
 
@@ -63,11 +65,12 @@
 
                                 <!-- Work Program -->
                                 <div>
-                                    <label for="work_program" class="text-gray-500 font-medium text-sm">Program Kerja</label>
+                                    <label for="work_program" class="text-gray-500 font-medium text-sm">Program
+                                        Kerja</label>
                                     <div class="relative">
-                                        <i class="fa fa-clipboard-list absolute left-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
-                                        <textarea placeholder="Masukkan Program Kerja" type="textarea" name="work_program"
-                                            id="work_program"
+                                        <i
+                                            class="fa fa-clipboard-list absolute left-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
+                                        <textarea placeholder="Masukkan Program Kerja" type="textarea" name="work_program" id="work_program"
                                             class="text-sm w-full h-14 pl-12 lead placeholder:text-gray-300 border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
                                             required autocomplete="off"></textarea>
                                     </div>
@@ -77,9 +80,9 @@
                                 <div>
                                     <label for="vision" class="text-gray-500 font-medium text-sm">Visi</label>
                                     <div class="relative">
-                                        <i class="fa fa-map-signs absolute left-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
-                                        <textarea placeholder="Masukkan Visi" type="textarea" name="vision"
-                                            id="vision"
+                                        <i
+                                            class="fa fa-map-signs absolute left-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
+                                        <textarea placeholder="Masukkan Visi" type="textarea" name="vision" id="vision"
                                             class="text-sm w-full h-14 pl-12 placeholder:text-gray-300 border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
                                             required autocomplete="off"></textarea>
                                     </div>
@@ -89,9 +92,9 @@
                                 <div>
                                     <label for="mission" class="text-gray-500 font-medium text-sm">Misi</label>
                                     <div class="relative">
-                                        <i class="fa fa-bullseye absolute left-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
-                                        <textarea placeholder="Masukkan Misi" type="textarea" name="mission"
-                                            id="mission"
+                                        <i
+                                            class="fa fa-bullseye absolute left-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
+                                        <textarea placeholder="Masukkan Misi" type="textarea" name="mission" id="mission"
                                             class="text-sm w-full h-14 pl-12 placeholder:text-gray-300 border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
                                             required autocomplete="off"></textarea>
                                     </div>
@@ -100,16 +103,18 @@
                                 <!-- Photo -->
                                 <div x-data="{ preview: null }">
                                     <label for="image" class="text-gray-500 font-medium text-sm">Foto</label>
-                                    
+
                                     <!-- Preview Image -->
                                     <div class="mb-3">
                                         <template x-if="preview">
-                                            <img :src="preview" class="w-[360px] h-[360px] object-cover border border-gray-300 shadow-sm">
+                                            <img :src="preview"
+                                                class="w-[360px] h-[360px] object-cover border border-gray-300 shadow-sm">
                                         </template>
                                     </div>
 
                                     <!-- File Input -->
-                                    <div class="relative flex items-center border border-gray-300 rounded-md shadow-sm bg-white">
+                                    <div
+                                        class="relative flex items-center border border-gray-300 rounded-md shadow-sm bg-white">
                                         <i class="fa fa-camera text-gray-300 absolute left-4"></i>
                                         <input type="file" name="image" id="image" accept="image/*" required
                                             @change="let file = $event.target.files[0]; 
@@ -126,7 +131,8 @@
 
                                 <!-- Video Link -->
                                 <div>
-                                    <label for="video_link" class="text-gray-500 font-medium text-sm">Link Video Kampanye</label>
+                                    <label for="video_link" class="text-gray-500 font-medium text-sm">Link Video
+                                        Kampanye</label>
                                     <div class="relative">
                                         <i class="fa fa-link absolute left-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
                                         <input placeholder="Masukkan Tautan Video" type="text" name="video_link"
@@ -136,30 +142,24 @@
                                     </div>
                                 </div>
 
-                                <!-- Position -->
+                                <!-- Position Name -->
                                 <div>
-                                    <label for="id_position" class="text-gray-500 font-medium text-sm">Pilih Posisi</label>
+                                    <label for="position_name" class="text-gray-500 font-medium text-sm">Nama
+                                        Posisi</label>
                                     <div class="relative">
                                         <i
-                                            class="fa fa-list absolute left-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
-                                        <select placeholder="Pilih Posisi" type="select" name="id_position" id="id_position"
-                                            class="text-sm w-full h-14 pl-12 pr-12 text-gray-300 placeholder:text-gray-300 border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
-                                            required autocomplete="off"
-                                            onchange="this.classList.remove('text-gray-300'); this.classList.add('text-gray-700');">
-                                            @if ($positions->count() <= 0)
-                                            <option value="" disabled selected>Tidak Ada Data Posisi, Buat Terlebih Dahulu!</option>
-                                            @endif
-                                            <option value="" disabled selected>Pilih Posisi</option>
-                                            @foreach ($positions as $position)
-                                                <option value="{{ $position->id }}">{{ $position->position_name }}</option>
-                                            @endforeach
-                                        </select>
+                                            class="fa fa-user-tie absolute left-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
+                                        <input placeholder="Masukkan Nama Posisi" type="text" name="position_name"
+                                            id="position_name"
+                                            class="text-sm w-full h-14 pl-12 placeholder:text-gray-300 border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                                            required autocomplete="off">
                                     </div>
                                 </div>
 
                                 <!-- Register Candidate Button -->
                                 <div class="mt-6 w-full flex flex-column gap-4">
-                                    <a href="{{ route('candidate') }}" class="mt-8 w-full px-6 py-4 bg-gray-400/80 hover:bg-gray-500/80 text-white rounded-xl transition-colors flex items-center justify-center gap-3">
+                                    <a href="{{ route('candidate') }}"
+                                        class="mt-8 w-full px-6 py-4 bg-gray-400/80 hover:bg-gray-500/80 text-white rounded-xl transition-colors flex items-center justify-center gap-3">
                                         <span class="font-semibold">Kembali</span>
                                     </a>
                                     <button type="submit"

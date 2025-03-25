@@ -86,20 +86,6 @@
 </div>
 @endif
 
-<!-- Auth Admin / Panitia Check -->
-@if (Auth::user()->role == 'panitia' && request()->is([
-
-    # Admin Management
-    'admin-mgmt', 
-    'admin-mgmt/create',
-    'admin.mgmt/show',
-    'admin.mgmt/form_password',
-
-    # Logs
-    'logs']))
-    @php abort(403, 'Unauthorized'); @endphp
-@endif
-
 <!-- Overlay for mobile when sidebar is open -->
 <div id="sidebarOverlay"
     class="overflow-y-auto fixed inset-0 drop-shadow-xl bg-black/5 bg-opacity-20 z-20 hidden md:hidden"
