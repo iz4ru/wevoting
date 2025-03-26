@@ -13,6 +13,7 @@
                             posisi.</p>
                     </div>
                     {{-- @if (Auth::user()->role == 'admin')
+                    @if (Auth::user()->role == 'admin')
                         <div class="shadow-lg w-max mt-4">
                             <a href="{{ route('position.create') }}"
                                 class="font-semibold flex items-center gap-3 px-4 py-3 lg:px-6 lg:py-4 bg-[#4F22AA] text-white rounded-md hover:bg-[#3C1C8C]">
@@ -21,6 +22,7 @@
                             </a>
                         </div>
                     @endif --}}
+                    @endif
                 </div>
                 <hr class="rounded border-t-2 border-[#B8B8B8]/50 my-8 mx-6">
 
