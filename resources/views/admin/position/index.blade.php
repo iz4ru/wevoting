@@ -22,7 +22,6 @@
                             </a>
                         </div>
                     @endif --}}
-                    @endif
                 </div>
                 <hr class="rounded border-t-2 border-[#B8B8B8]/50 my-8 mx-6">
 
