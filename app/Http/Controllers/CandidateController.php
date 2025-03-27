@@ -62,6 +62,15 @@ class CandidateController extends Controller
         $activity = 'Membuat data kandidat baru';
         $this->logActivity($activity);
 
+        $maxCandidate = 5;
+
+        $candidateCount = Candidate::count();
+
+        if ($candidateCount >= $maxCandidate) 
+        {
+            return back()->with('error', '❌ Jumlah kandidat sudah mencapai batas maksimum!');
+        }
+
         $validated = $request->validate(
             [
                 'name' => 'required|string|max:255',
