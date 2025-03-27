@@ -222,6 +222,7 @@
                                     </div>
                                 @endforeach
                             </div>
+                            @if (!$candidates->count() < 0)
                             <!-- Pagination -->
                             <div class="swiper-pagination relative mt-4"></div>
                             <!-- Custom Navigation Buttons -->
@@ -233,6 +234,8 @@
                                 class="custom-swiper-button-next absolute right-0 top-1/2 transform -translate-y-1/2 z-10 text-[#4F22AA] w-10 h-10 rounded-full flex items-center justify-center cursor-pointer">
                                 <i class="fa-solid fa-chevron-right"></i>
                             </div>
+                            @endif
+
                         </div>
                     </div>
                 </div>

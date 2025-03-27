@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Log;
 use App\Models\Voter;
 use App\Models\Candidate;
 use App\Models\VoteResult;
+use App\Exports\DataExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class HomeController extends Controller
 {
@@ -54,6 +58,35 @@ class HomeController extends Controller
         
         return view('admin.dashboard', $x);
     }
+
+    public function logActivity($activity)
+    {
+        $user = Auth::user();
+        $username = $user->username;
+        $role = null;
+
+        if ($user->role === 'admin') {
+            $role = 'Admin';
+        } elseif ($user->role === 'panitia') {
+            $role = 'Admin';
+        }
+
+        $log = new Log([
+            'username' => $username,
+            'activity' => $activity,
+            'role' => $role,
+        ]);
+
+        $log->save();
+    }
+
+    public function exportData()
+    {
+        $activity = 'Export data dasbor';
+        $this->logActivity($activity);
+    
+        return Excel::download(new DataExport(), 'dashboard_' . now()->format('d-M-Y_H-i') . '.xlsx');
+    }    
 
     public function dashboardUpdate(Request $request)
     {

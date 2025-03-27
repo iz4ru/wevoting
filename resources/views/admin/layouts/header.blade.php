@@ -44,6 +44,14 @@
                             </a>
                         </div>
                         <div class="">
+                            <!-- Muat Profil User yang Ada Pada Session -->
+                            <a href="{{ route('dashboard.export') }}" 
+                                class="flex items-center gap-4 w-full rounded-md px-4 py-2 text-gray-500 hover:bg-gray-200">
+                                <i class="fa-solid fa-save text-gray-500 text-md"></i>
+                                <span>Ekspor Data Saat Ini</span>
+                            </a>
+                        </div>
+                        <div class="">
                             <form action="{{ route('admin.logout') }}" method="POST"
                                 onsubmit="validateForm(event)">
                                 @csrf

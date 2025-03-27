@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use App\Exports\VoterExport;
 use App\Imports\VoterImport;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
@@ -21,11 +22,23 @@ class VoterController extends Controller
     {
         $query = Voter::query();
     
-        if ($request->filled('validation') && $request->validation !== '') {
-            $query->where('validation', $request->validation);
+        // Filter berdasarkan kelas jika ada
+        if ($request->filled('class')) {
+            $query->where('class', $request->class);
         }
     
-        $x['voters'] = $query->get(); // Ambil data setelah filter diterapkan
+        // Filter berdasarkan jurusan jika ada
+        if ($request->filled('vocation')) {
+            $query->where('vocation', $request->vocation);
+        }
+    
+        // Ambil data setelah filter diterapkan
+        $x['voters'] = $query->get();
+    
+        // Ambil daftar unik kelas dan jurusan dari database
+        $x['classes'] = Voter::select('class')->distinct()->pluck('class');
+        $x['vocations'] = Voter::select('vocation')->distinct()->pluck('vocation');
+    
         $x['subtitle'] = 'Data Users Voting';
     
         return view('admin.voter.index', $x);
@@ -99,9 +112,35 @@ class VoterController extends Controller
         $activity = 'Export data pemilih';
         $this->logActivity($activity);
         
-        return Excel::download(new VoterExport(), 'voters_' . now()->format('Y-m-d_H-i-s') . '.xlsx');
+        return Excel::download(new VoterExport(), 'voters_' . now()->format('d-M-Y_H-i') . '.xlsx');
 
         return redirect()->route('voter')->with('success', '✅ Data pemilih berhasil diekspor!');
+    }
+
+    public function exportVoterPDF(Request $request)
+    {
+        $activity = 'Export PDF data pemilih';
+        $this->logActivity($activity);
+
+        $query = Voter::query();
+
+        if ($request->filled('class')) {
+            $query->where('class', $request->class);
+        }
+
+        if ($request->filled('vocation')) {
+            $query->where('vocation', $request->vocation);
+        }
+
+        if ($request->filled('name')) {
+            $query->where('name', 'LIKE', '%' . $request->name . '%');
+        }
+
+        $data = $query->get();
+
+        $pdf = Pdf::loadView('admin.voter.pdf', ['data' => $data]);
+
+        return $pdf->stream('voter.pdf');
     }
 
     public function createVoter()

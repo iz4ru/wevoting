@@ -12,6 +12,7 @@ use App\Http\Controllers\PositionController;
 use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\SuccessVoteController;
+use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\Auth\AdminLoginController;
 use App\Http\Controllers\Auth\VoterLoginController;
 
@@ -21,12 +22,18 @@ Route::get('/', [LandingPageController::class, 'index'])->name('landing.page');
 # Login Index
 Route::get('/login-user', function () {return view('login-user');})->name('login.user');
 
+Route::get('/forgot-password', [ResetPasswordController::class, 'index'])->middleware('guest')->name('password.request');
+Route::post('/forgot-password', [ResetPasswordController::class, 'sendPasswordResetLink'])->middleware('guest')->name('password.email');
+Route::get('/reset-password/{token}', [ResetPasswordController::class, 'resetPassword'])->middleware('guest')->name('password.reset');
+Route::post('/reset-password', [ResetPasswordController::class, 'updatePassword'])->middleware('guest')->name('password.update');
+
 # Admin and Operators
 Route::middleware('auth') -> group(function(){
 
     # Admin Home
     Route::get('dashboard', [HomeController::class, 'index'])->name('dashboard');
     Route::get('dashboard-update', [HomeController::class, 'dashboardUpdate'])->name('dashboard.update');
+    Route::get('dashboard/export', [HomeController::class, 'exportData'])->name('dashboard.export');
 
     # Toggle On / Off Election
     Route::get('/election/start', [VotingController::class, 'startElectionSession'])->name('election.start');
@@ -71,11 +78,12 @@ Route::middleware('auth') -> group(function(){
     Route::get('voter/import', [VoterController::class, 'showImportVoter'])->name('voter.show.import');
     Route::post('voter/import/onload', [VoterController::class, 'importVoter'])->name('voter.import');
     Route::get('voter/export', [VoterController::class, 'exportVoter'])->name('voter.export');
+    Route::get('voter/export-pdf', [VoterController::class, 'exportVoterPDF'])->name('voter.export.pdf');
 
     # Positions
     Route::get('position', [PositionController::class, 'index'])->name('position');
-    Route::get('position/create', [PositionController::class, 'createPosition'])->name('position.create');
-    Route::post('position/store', [PositionController::class, 'storePosition'])->name('position.store');
+    // Route::get('position/create', [PositionController::class, 'createPosition'])->name('position.create');
+    // Route::post('position/store', [PositionController::class, 'storePosition'])->name('position.store');
     Route::get('position/show/{id}', [PositionController::class, 'showPosition'])->name('position.show');
     Route::put('position/update/{id}', [PositionController::class, 'updatePosition'])->name('position.update');
     Route::delete('position/delete/{id}', [PositionController::class, 'deletePosition'])->name('position.delete');

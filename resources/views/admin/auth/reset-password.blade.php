@@ -1,29 +1,3 @@
-<?php
-
-use App\Livewire\Forms\LoginForm;
-use Illuminate\Support\Facades\Session;
-use Livewire\Attributes\Layout;
-use Livewire\Volt\Component;
-
-new #[Layout('layouts.guest')] class extends Component
-{
-    public LoginForm $form;
-
-    /**
-     * Handle an incoming authentication request.
-     */
-    public function login(): void
-    {
-        $this->validate();
-
-        $this->form->authenticate();
-
-        Session::regenerate();
-
-        $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
-    }
-}; ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -65,7 +39,7 @@ new #[Layout('layouts.guest')] class extends Component
                 <div class="bg-white/30 backdrop-blur-lg rounded-2xl shadow-lg p-8">
                     <!-- Welcome Icon -->
                     <div class="text-left mb-4">
-                        <img src="{{ asset('img/8-bit.png') }}" 
+                        <img src="{{ asset('img/reset.png') }}" 
                         alt="Selamat Datang" 
                         class="w-16 h-16 object-contain"/>
                     </div>
@@ -73,32 +47,47 @@ new #[Layout('layouts.guest')] class extends Component
                     <!-- Welcome Text -->
                     <div class="text-left mb-4">
                         <h1 class="text-4xl font-bold text-gray-700 mb-2">
-                            Sudah Siap <br>  Untuk Wevoting?
+                            Satu Langkah Lagi!
                         </h1>
                         <p class="text-md text-gray-500">
-                            Ayo login terlebih dahulu!
+                            Yuk masukkan dulu form reset passwordnya!
                         </p>
                     </div>
 
-                    <!-- Login Form -->
+                    <!-- Register Form -->
                     <div class="">
-                        <form wire:submit='login' action="{{ route('admin.login') }}" method="POST" onsubmit="validateForm(event)">
+                        <form wire:submit='register' action="{{ route('password.update') }}" method="POST" onsubmit="validateForm(event)">
                             @csrf
                             <div class="space-y-4">
+
+                                <input type="hidden" name=token id="token" value={{ $token }}>
+
+                                <!-- Email -->
                                 <div class="relative w-full">
                                     <i class="fa fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
-                                    <input wire:model="form.email" placeholder="Masukkan Email" type="email" name="email" id="email" 
+                                    <input wire:model="email" placeholder="Masukkan Email Anda" type="email" name="email" id="email" 
                                         class="text-sm w-full h-14 pl-12 placeholder:text-gray-300 border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" 
                                         required autofocus autocomplete="email">
-                                </div>                                
+                                </div>
+                                
+                                <!-- Password -->
                                 <div class="relative w-full">
                                     <i class="fa fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
-                                    <input wire:model="form.password" placeholder="Masukkan Password" type="password" name="password" id="password"
+                                    <input wire:model="password" placeholder="Masukkan Password Anda" type="password" name="password" id="password"
                                         class="text-sm w-full h-14 pl-12 pr-12 placeholder:text-gray-300 border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
                                         required autocomplete="off">
-                                    <i class="fa fa-eye absolute right-4 top-1/2 -translate-y-1/2 text-gray-300 cursor-pointer" id="togglePassword"></i>
+                                    <i class="fa fa-eye absolute right-4 top-1/2 -translate-y-1/2 text-gray-300 cursor-pointer togglePassword"></i>
                                 </div>
 
+                                <!-- Confirm Password -->
+                                <div class="relative w-full">
+                                    <i class="fa fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
+                                    <input wire:model="password_confirmation" placeholder="Konfirmasi Password Anda" type="password" name="password_confirmation" id="password_confirmation"
+                                        class="text-sm w-full h-14 pl-12 pr-12 placeholder:text-gray-300 border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                                        required autocomplete="off">
+                                    <i class="fa fa-eye absolute right-4 top-1/2 -translate-y-1/2 text-gray-300 cursor-pointer togglePassword"></i>
+                                </div>
+                
                                 @if(session('success'))
                                 <div class="alert alert-success alert-dismissible fade show text-sm py-2 px-4 bg-green-100 text-green-500 border border-green-500 rounded-md" role="alert" id="successAlert">
                                     <p>{{ session('success') }}</p>
@@ -109,20 +98,18 @@ new #[Layout('layouts.guest')] class extends Component
                                 <div class="alert alert-error alert-dismissible fade show text-sm py-2 px-4 bg-red-100 text-red-500 border border-red-500 rounded-md" role="alert" id="errorAlert">
                                     <p>{{ session('error') }}</p>
                                 </div>
-                                @endif                        
+                                @endif               
                                 
                                 <script>
-                                    const passwordInput = document.getElementById("password");
-                                    const togglePassword = document.getElementById("togglePassword");
+                                    document.querySelectorAll(".togglePassword").forEach((icon) => {
+                                        icon.addEventListener("click", function () {
+                                            const passwordInput = this.previousElementSibling; // Ambil input sebelum ikon
+                                            passwordInput.type = passwordInput.type === "password" ? "text" : "password";
                                 
-                                    togglePassword.addEventListener("click", function () {
-                                        if (passwordInput.type === "password") {
-                                            passwordInput.type = "text";
-                                            this.classList.replace("fa-eye", "fa-eye-slash"); // Ganti ikon jadi 'mata tertutup'
-                                        } else {
-                                            passwordInput.type = "password";
-                                            this.classList.replace("fa-eye-slash", "fa-eye"); // Balikin ke 'mata terbuka'
-                                        }
+                                            // Ganti ikon
+                                            this.classList.toggle("fa-eye");
+                                            this.classList.toggle("fa-eye-slash");
+                                        });
                                     });
                                 </script>
 
@@ -143,30 +130,12 @@ new #[Layout('layouts.guest')] class extends Component
                                 </script>
                             </div>
 
-                            <!-- Register First Admin Account -->
-                            @if (!$adminExists)
-                                <div class="space-y-4 mt-4">
-                                    <a href="{{ route('register.admin') }}" 
-                                       class="flex items-center justify-center w-full px-6 py-4 bg-[#22A06B] hover:bg-[#1A754E] text-white rounded-xl transition-colors">
-                                        <div class="text-center flex items-center gap-3">
-                                            <span class="font-semibold">Registrasi Admin</span>
-                                            <i class="fa-solid fa-user-tie"></i>
-                                        </div>
-                                    </a>
-                                </div>
-                            @endif
-
-                            <!-- Forgot Password -->
-                            <div class="space-y-4 mt-2 text-sm text-right text-[#7C3AED] hover:text-[#4F22AA] hover:underline">
-                                <a href="{{ route('password.request') }}">Lupa Password?</a>
-                            </div>
-
-                            <!-- Login Buttons -->
+                            <!-- Register Buttons -->
                             <div class="space-y-4 mt-4">
                                 <button type="submit" 
-                                    class="flex items-center justify-center w-full px-6 py-4 bg-[#7C3AED] hover:bg-[#6D31D5] text-white rounded-xl transition-colors">
+                                    class="flex items-center justify-center w-full px-6 py-4 bg-[#22A06B] hover:bg-[#1A754E] text-white rounded-xl transition-colors">
                                     <div class="text-center flex items-center gap-3">
-                                        <span class="font-semibold">Masuk</span>
+                                        <span class="font-semibold">Reset Password</span>
                                         <i class="fa-solid fa-chevron-right"></i>
                                     </div>
                                 </button>
