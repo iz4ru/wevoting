@@ -8,13 +8,16 @@
             <div class="flex flex-col bg-white/30 backdrop-blur-lg rounded-xl shadow-lg p-6">
                 <div class="bg-[#FFD164]/20 rounded-lg shadow-lg p-6">
                     <div class="">
-                        <h1 class="text-2xl lg:text-3xl font-bold text-[#C78D04] mb-2">Preview {{ $candidate->position->position_name }}</h1>
-                        <p class="text-sm text-[#C78D04] lg:text-base">Lihat visi, misi, program kerja dari {{ $candidate->position->position_name }}.</p>
+                        <h1 class="text-2xl lg:text-3xl font-bold text-[#C78D04] mb-2">Preview
+                            {{ $candidate->position->position_name }}</h1>
+                        <p class="text-sm text-[#C78D04] lg:text-base">Lihat visi, misi, program kerja dari
+                            {{ $candidate->position->position_name }}.</p>
                     </div>
                 </div>
                 <hr class="rounded border-t-2 border-[#B8B8B8]/50 my-8 mx-6">
 
-                <a href="{{ route('voter.dashboard') }}" class=" w-1/2 lg:w-1/4 px-6 py-4 bg-gray-400/80 hover:bg-gray-500/80 text-white rounded-xl transition-colors flex items-center justify-center gap-3">
+                <a href="{{ route('voter.dashboard') }}"
+                    class=" w-1/2 lg:w-1/4 px-6 py-4 bg-gray-400/80 hover:bg-gray-500/80 text-white rounded-xl transition-colors flex items-center justify-center gap-3">
                     <span class="font-semibold">Kembali</span>
                 </a>
             </div>
@@ -100,12 +103,19 @@
                                     </div>
 
                                     <!-- Video Section -->
-                                    <div class="mt-12">
-                                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Video Kampanye</h3>
-                                        <iframe src="{{ $candidate->video_link }}" frameborder="0"
-                                            class="w-full aspect-video bg-gray-200 rounded-lg flex items-center justify-center">
-                                            <span class="text-gray-400">Video Placeholder</span>
-                                        </iframe>
+                                    <div class="mt-6 w-full">
+                                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Video Kampanye
+                                        </h3>
+                                        @if (!empty($candidate->video_link) && filter_var($candidate->video_link, FILTER_VALIDATE_URL))
+                                            <iframe src="{{ $candidate->video_link }}" frameborder="0"
+                                                class="w-full aspect-video bg-gray-200 rounded-lg flex items-center justify-center">
+                                            </iframe>
+                                        @else
+                                            <div
+                                                class="w-full aspect-video bg-gray-200 rounded-lg flex items-center justify-center text-gray-600">
+                                                <p>Maaf, Video Sedang Tidak Tersedia</p>
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
