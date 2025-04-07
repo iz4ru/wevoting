@@ -39,7 +39,7 @@
                 <div class="bg-white/30 backdrop-blur-lg rounded-2xl shadow-lg p-8">
                     <!-- Welcome Icon -->
                     <div class="text-left mb-4">
-                        <img src="{{ asset('img/reset.png') }}" 
+                        <img src="{{ asset('img/lock-key.png') }}" 
                         alt="Selamat Datang" 
                         class="w-16 h-16 object-contain"/>
                     </div>
