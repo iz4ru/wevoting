@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
@@ -18,6 +18,11 @@
     <style>
         [x-cloak] {
             display: none !important;
+        }
+
+        .swiper-slide {
+            overflow: visible !important;
+            height: auto !important;
         }
     </style>
     <link rel="stylesheet" href="//cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css">
@@ -45,40 +50,58 @@
     <div class="min-h-screen flex flex-col max-w-full">
         <!-- Navbar -->
         <nav
-            class="fixed left-0 w-full sm:top-5 sm:left-1/2 sm:transform sm:-translate-x-1/2 sm:w-11/12 sm:max-w-7xl bg-white/30 backdrop-blur-lg sm:rounded-2xl px-4 sm:px-8 py-5 sm:py-4 flex justify-between items-center shadow-lg z-50">
+            class="fixed top-0 left-0 w-full bg-white/30 backdrop-blur-lg px-4 py-4 flex justify-between items-center shadow-lg z-50
+            lg:top-5 lg:left-1/2 lg:-translate-x-1/2 lg:w-11/12 lg:max-w-7xl lg:rounded-2xl lg:px-8 lg:py-5 lg:transform">
             <!-- Logo -->
             <div class="flex items-center">
                 <i class="fa-solid fa-check-to-slot fa-xl sm:fa-2xl px-2" style="color: #4F22AA;"></i>
                 <span class="text-[#4F22AA] text-secondary font-bold text-xl sm:text-2xl ml-2">WEVOTING</span>
             </div>
 
-            <!-- Navigation Button Group -->
-            <div class="flex gap-2 sm:gap-4">
-                <a href="#candidate"
-                    class="button bg-[#E3E3E3] text-[#323A43] backdrop-blur-lg px-6 sm:px-8 py-3 sm:py-3 rounded-md text-xs sm:text-sm font-normal hover:bg-[#d6d6d6] transition-colors">Kandidat</a>
-                <a href="/login-user"
-                    class="button bg-[#612AD0] text-[#FAFAFA] px-6 sm:px-8 py-3 sm:py-3 rounded-md text-xs sm:text-sm font-bold hover:bg-[#4F22AA] transition-colors flex items-center gap-1 sm:gap-2">
-                    Masuk
-                    <i class="fa-solid fa-chevron-right fa-xs sm:fa-sm"></i>
-                </a>
+            <div x-data="{ open: false }" class="relative">
+                <button @click="open = !open" class="w-10 h-10 overflow-hidden">
+                    <i class="fa-solid fa-bars text-gray-600 hover:text-gray-800 text-xl"></i>
+                </button>
+                <!-- Dropdown Menu -->
+                <div x-show="open" x-transition:enter="transition ease-out duration-100 transform"
+                    x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
+                    x-transition:leave="transition ease-in duration-75 transform"
+                    x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
+                    @click.away="open = false" x-cloak
+                    class="absolute right-0 w-48 bg-[#FAFAFA] shadow-lg rounded-lg p-2 z-50 transition transisiton-transform duration-300 ease-in-out">
+                    <div class="">
+                        <a href="#candidate"
+                            class="flex items-center gap-4 w-full rounded-md px-4 py-2 text-gray-500 hover:bg-gray-200">
+                            <i class="fa-solid fa-user text-gray-500 text-md"></i>
+                            <span>Kandidat</span>
+                        </a>
+                    </div>
+                    <div class="">
+                        <a href="/login-user"
+                            class="flex items-center gap-4 w-full rounded-md px-4 py-2 text-gray-500 hover:bg-gray-200">
+                            <i class="fa-solid fa-right-from-bracket text-gray-500 text-md"></i>
+                            <span>Masuk</span>
+                        </a>
+                    </div>
+                </div>
             </div>
         </nav>
 
         <!-- Hero Section -->
-        <section id="hero" class="py-20 overflow-hidden">
+        <section id="hero" class="my-20 overflow-hidden">
             <div class="px-4 md:max-w-7xl mx-auto w-full">
                 <div
                     class="flex flex-col px-4 lg:flex-row items-center justify-between gap-12 lg:translate-x-12 transition-transform duration-500 ease-in-out">
                     <!-- Left Content -->
                     <div class="lg:max-w-[600px] py-8">
                         <h1 class="text-4xl lg:text-5xl font-bold text-gray-700 leading-tight">
-                            Bersuara Itu Hak,<br />
+                            Bersuara Itu Hak,
                         </h1>
                         <h1 class="text-4xl lg:text-5xl font-bold text-gray-700 leading-tight mb-4">
                             <span class="text-[#4F22AA]">Wevoting</span> Bikin Makin<br />
                             Gampang!
                         </h1>
-                        <p class="text-gray-500 text-lg leading-relaxed">
+                        <p class="text-gray-500 text-base lg:text-lg leading-relaxed">
                             Tidak perlu kertas suara, semua sudah digital! Hemat waktu,<br class="hidden md:block" />
                             lebih cepat, dan lebih terpercaya. 🗳️✅
                         </p>
@@ -94,166 +117,187 @@
             </div>
         </section>
 
-        <!-- Candidate Section -->
+        <!-- Candidate Section - Replace your existing candidate section with this -->
         <section id="candidate">
-            <div class="lg:py-8">
-                <div class="max-w-6xl mx-auto px-4">
-                    <!-- Header -->
-                    <div class="text-center mb-8">
-                        <h2 class="text-3xl font-bold text-gray-800 mt-6 mb-2">Pilih Kandidat Terbaikmu!</h2>
-                        <p class="text-gray-600">
-                            Gunakan hak suaramu untuk memilih pemimpin yang tepat. <br>
-                            Cermati, telusuri, dan berikan suaramu dengan mudah lewat Wevoting!
-                        </p>
+
+            <!-- Header -->
+            @if (count($candidates) == 0)
+                <div class="text-center mb-8 max-w-[500px] lg:max-w-[600px] mx-auto px-4">
+                    <h2 class="text-2xl font-bold text-gray-800 mt-6 mb-2">Belum Ada Kandidat Tersedia</h2>
+                    <p class="text-gray-500">
+                        Silakan menunggu informasi lebih lanjut dari kami!
+                    </p>
+                </div>
+            @elseif (count($candidates) >= 1)
+                <div class="text-center mb-8 max-w-[500px] lg:max-w-[600px] mx-auto px-4">
+                    <h2 class="text-2xl font-bold text-gray-800 mt-6 mb-2">Pilih Kandidat Terbaikmu!</h2>
+                    <p class="text-gray-500">
+                        Gunakan hak suaramu untuk memilih pemimpin yang tepat.
+                        Cermati, telusuri, dan berikan suaramu dengan mudah lewat Wevoting!
+                    </p>
+                    <div class="mt-4 flex items-center justify-center gap-2 animate-bounce">
+                        <span class="text-[#4F22AA] font-semibold animate-pulse">
+                            Geser Untuk Melihat Kandidat Lainnya
+                        </span>
+                        <i class="fa-solid fa-arrows-left-right text-[#4F22AA] text-lg animate-pulse"></i>
                     </div>
+                </div>
+            @endif
 
-                    <!-- Mobile & Desktop Swiper View -->
-                    <div class="candidate-swiper-container" x-data="candidateCarousel()">
-                        <!-- Swiper Container -->
-                        <div class="w-full mx-auto relative candidate-swiper" x-ref="candidateSwiper">
-                            <!-- Swiper Wrapper -->
-                            <div class="swiper-wrapper">
-                                @foreach ($candidates as $candidate)
-                                    <div class="swiper-slide h-auto">
-                                        <div class="bg-[#F1F1F1] bg-opacity-40 rounded-lg shadow-lg p-6">
-                                            <div class="flex flex-col items-center gap-2">
-                                                <!-- Candidate Position -->
-                                                <div
-                                                    class="bg-[#926AE1] bg-opacity-20 text-[#FAFAFA] px-16 py-2 rounded-md text-sm font-bold transition-colors flex items-center gap-2 mb-4">
-                                                    <h3 class="text-xl font-semibold text-[#411C8C]">
-                                                        {{ $candidate->position->position_name }}</h3>
-                                                </div>
-                                                <!-- Candidate Image -->
-                                                <div
-                                                    class="relative items-center justify-center my-4 bg-[#926AE1]/10 hover:bg-[#926AE1]/20 backdrop-blur-lg rounded-md transform transition ease-in-out">
-                                                    <img src="{{ Storage::url('images/' . $candidate->image) }}"
-                                                        class="w-[240px] h-[240px] lg:w-[360px] lg:h-[360px] object-cover rounded-lg border border-gray-300 shadow-sm"
-                                                        alt="{{ $candidate->name }}">
-                                                </div>
-                                                <!-- Candidate Name -->
-                                                <h3 class="text-lg font-semibold text-gray-800 mb-4">
-                                                    {{ $candidate->name }}</h3>
+            <div class="max-w-4xl mx-auto px-4">
 
-                                                <!-- Collapsible Content Sections -->
-                                                <div class="space-y-4 w-full">
-                                                    <!-- Visi -->
-                                                    <div class="bg-[#926AE1] bg-opacity-20 rounded-lg p-4">
-                                                        <div class="text-[#411C8C]">
-                                                            <h3 class="font-semibold uppercase mb-2">Visi</h3>
-                                                            <p class="text-content whitespace-pre-line"
-                                                                id="vision-text-{{ $candidate->id }}">
-                                                                {{ Str::limit($candidate->vision, 255, '...') }}
-                                                            </p>
-                                                            <p class="text-content hidden whitespace-pre-line"
-                                                                id="vision-text-full-{{ $candidate->id }}">
-                                                                {{ $candidate->vision }}
-                                                            </p>
-                                                            <button
-                                                                class="toggle-button text-[#1D7AFC] hover:underline mt-2"
-                                                                data-short="vision-text-{{ $candidate->id }}"
-                                                                data-full="vision-text-full-{{ $candidate->id }}">
-                                                                Lihat Selengkapnya
-                                                            </button>
-                                                        </div>
-                                                    </div>
+                <!-- Swiper Container -->
+                <div class="candidate-swiper-container" x-data="candidateCarousel()">
+                    <div class="w-full mx-auto relative candidate-swiper my-8" x-ref="candidateSwiper">
+                        <!-- Swiper Wrapper -->
+                        <div class="swiper-wrapper pb-12">
+                            @foreach ($candidates as $candidate)
+                                <div class="swiper-slide h-auto overflow-visible">
+                                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
 
-                                                    <!-- Misi -->
-                                                    <div class="bg-[#926AE1] bg-opacity-20 rounded-lg p-4">
-                                                        <div class="text-[#411C8C]">
-                                                            <h3 class="font-semibold uppercase mb-2">Misi</h3>
-                                                            <p class="text-content whitespace-pre-line"
-                                                                id="mission-text-{{ $candidate->id }}">
-                                                                {{ Str::limit($candidate->mission, 255, '...') }}
-                                                            </p>
-                                                            <p class="text-content hidden whitespace-pre-line"
-                                                                id="mission-text-full-{{ $candidate->id }}">
-                                                                {{ $candidate->mission }}
-                                                            </p>
-                                                            <button
-                                                                class="toggle-button text-[#1D7AFC] hover:underline mt-2"
-                                                                data-short="mission-text-{{ $candidate->id }}"
-                                                                data-full="mission-text-full-{{ $candidate->id }}">
-                                                                Lihat Selengkapnya
-                                                            </button>
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Program Kerja -->
-                                                    <div class="bg-[#926AE1] bg-opacity-20 rounded-lg p-4">
-                                                        <div class="text-[#411C8C]">
-                                                            <h3 class="font-semibold uppercase mb-2">Program Kerja
-                                                            </h3>
-                                                            <p class="text-content whitespace-pre-line"
-                                                                id="work-text-{{ $candidate->id }}">
-                                                                {{ Str::limit($candidate->work_program, 255, '...') }}
-                                                            </p>
-                                                            <p class="text-content hidden whitespace-pre-line"
-                                                                id="work-text-full-{{ $candidate->id }}">
-                                                                {{ $candidate->work_program }}
-                                                            </p>
-                                                            <button
-                                                                class="toggle-button text-[#1D7AFC] hover:underline mt-2"
-                                                                data-short="work-text-{{ $candidate->id }}"
-                                                                data-full="work-text-full-{{ $candidate->id }}">
-                                                                Lihat Selengkapnya
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <!-- Video Section -->
-                                                <div class="mt-6 w-full">
-                                                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Video Kampanye
-                                                    </h3>
-                                                    @if (!empty($candidate->video_link) && filter_var($candidate->video_link, FILTER_VALIDATE_URL))
-                                                        <iframe src="{{ $candidate->video_link }}" frameborder="0"
-                                                            class="w-full aspect-video bg-gray-200 rounded-lg flex items-center justify-center">
-                                                        </iframe>
-                                                    @else
-                                                        <div
-                                                            class="w-full aspect-video bg-gray-200 rounded-lg flex items-center justify-center text-gray-600">
-                                                            <p>Maaf, Video Sedang Tidak Tersedia</p>
-                                                        </div>
-                                                    @endif
-                                                </div>
-
+                                        <!-- Header Section with Gradient -->
+                                        <div class="bg-gradient-to-br from-[#4F22AA] to-[#926AE1] p-6 text-center">
+                                            <div
+                                                class="inline-block bg-white/20 backdrop-blur-sm px-6 py-2 rounded-full mb-3">
+                                                <h3 class="text-lg font-bold text-white">
+                                                    {{ $candidate->position->position_name }}
+                                                </h3>
+                                            </div>
+                                            <div class="mt-4 mb-16">
+                                                <h2 class="text-2xl font-bold text-white mb-2">{{ $candidate->name }}
+                                                </h2>
                                             </div>
                                         </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                            @if ($candidates->count() > 0)
-                            <!-- Pagination -->
-                            <div class="swiper-pagination relative mt-4"></div>
-                            <!-- Custom Navigation Buttons -->
-                            <div
-                                class="custom-swiper-button-prev absolute left-0 top-1/2 transform -translate-y-1/2 z-10 text-[#4F22AA] w-10 h-10 rounded-full flex items-center justify-center cursor-pointer">
-                                <i class="fa-solid fa-chevron-left"></i>
-                            </div>
-                            <div
-                                class="custom-swiper-button-next absolute right-0 top-1/2 transform -translate-y-1/2 z-10 text-[#4F22AA] w-10 h-10 rounded-full flex items-center justify-center cursor-pointer">
-                                <i class="fa-solid fa-chevron-right"></i>
-                            </div>
-                            @endif
 
+                                        <!-- Candidate Image - Circular with border -->
+                                        <div class="relative -mt-16 mb-6">
+                                            <div
+                                                class="w-48 h-48 mx-auto rounded-full border-4 border-white shadow-xl overflow-hidden bg-gradient-to-br from-[#926AE1]/10 to-[#926AE1]/20">
+                                                <img src="{{ Storage::url('images/' . $candidate->image) }}"
+                                                    class="w-full h-full object-cover" alt="{{ $candidate->name }}">
+                                            </div>
+                                        </div>
+
+                                        <!-- Video Section -->
+                                        <div class="px-6 mb-6">
+                                            <h3
+                                                class="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                                                <i class="fa-solid fa-video text-[#4F22AA]"></i>
+                                                Video Kampanye
+                                            </h3>
+                                            @if (!empty($candidate->video_link) && filter_var($candidate->video_link, FILTER_VALIDATE_URL))
+                                                <div class="relative rounded-xl overflow-hidden shadow-md">
+                                                    <iframe src="{{ $candidate->video_link }}" frameborder="0"
+                                                        class="w-full aspect-video"
+                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                        allowfullscreen>
+                                                    </iframe>
+                                                </div>
+                                            @else
+                                                <div
+                                                    class="w-full aspect-video bg-gray-200 rounded-xl flex items-center justify-center text-gray-600 shadow-md">
+                                                    <div class="text-center">
+                                                        <i class="fa-solid fa-video-slash text-4xl mb-2"></i>
+                                                        <p>Video Tidak Tersedia</p>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
+
+                                        <!-- Accordion Content with Alpine.js -->
+                                        <div class="px-6 pb-6 space-y-4" x-data="{ activeTab: null }">
+
+                                            <!-- Visi Accordion -->
+                                            <div class="border border-[#926AE1]/30 rounded-xl overflow-hidden transition-all duration-300"
+                                                :class="{ 'mt-4': activeTab === 'visi-{{ $candidate->id }}' }">
+                                                <button
+                                                    @click="activeTab = activeTab === 'visi-{{ $candidate->id }}' ? null : 'visi-{{ $candidate->id }}'; 
+                                                    $nextTick(() => $refs.candidateSwiper.swiper.updateAutoHeight())"
+                                                    class="w-full px-4 py-3 bg-gradient-to-r from-[#926AE1]/10 to-[#926AE1]/5 flex items-center justify-between hover:from-[#926AE1]/20 hover:to-[#926AE1]/10 transition-all">
+                                                    <div class="flex items-center gap-3">
+                                                        <i class="fa-solid fa-bullseye text-[#4F22AA]"></i>
+                                                        <span class="font-semibold text-[#411C8C]">VISI</span>
+                                                    </div>
+                                                    <i class="fa-solid fa-chevron-down text-[#4F22AA] transition-transform duration-300"
+                                                        :class="{ 'rotate-180': activeTab === 'visi-{{ $candidate->id }}' }"></i>
+                                                </button>
+                                                <div x-show="activeTab === 'visi-{{ $candidate->id }}'" x-collapse
+                                                    class="px-4 py-4 bg-white">
+                                                    <div class="scrollable-content">
+                                                        <p class="text-[#411C8C] leading-relaxed whitespace-pre-line">
+                                                            {{ $candidate->vision }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Misi Accordion -->
+                                            <div class="border border-[#926AE1]/30 rounded-xl overflow-hidden transition-all duration-300"
+                                                :class="{ 'mt-4': activeTab === 'misi-{{ $candidate->id }}' }">
+                                                <button
+                                                    @click="activeTab = activeTab === 'misi-{{ $candidate->id }}' ? null : 'misi-{{ $candidate->id }}'; 
+                                                    $nextTick(() => $refs.candidateSwiper.swiper.updateAutoHeight())"
+                                                    class="w-full px-4 py-3 bg-gradient-to-r from-[#926AE1]/10 to-[#926AE1]/5 flex items-center justify-between hover:from-[#926AE1]/20 hover:to-[#926AE1]/10 transition-all">
+                                                    <div class="flex items-center gap-3">
+                                                        <i class="fa-solid fa-list-check text-[#4F22AA]"></i>
+                                                        <span class="font-semibold text-[#411C8C]">MISI</span>
+                                                    </div>
+                                                    <i class="fa-solid fa-chevron-down text-[#4F22AA] transition-transform duration-300"
+                                                        :class="{ 'rotate-180': activeTab === 'misi-{{ $candidate->id }}' }"></i>
+                                                </button>
+                                                <div x-show="activeTab === 'misi-{{ $candidate->id }}'" x-collapse
+                                                    class="px-4 py-4 bg-white">
+                                                    <div class="scrollable-content">
+                                                        <p class="text-[#411C8C] leading-relaxed whitespace-pre-line">
+                                                            {{ $candidate->mission }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Program Kerja Accordion -->
+                                            <div class="border border-[#926AE1]/30 rounded-xl overflow-hidden transition-all duration-300"
+                                                :class="{ 'mt-4': activeTab === 'program-{{ $candidate->id }}' }">
+                                                <button
+                                                    @click="activeTab = activeTab === 'program-{{ $candidate->id }}' ? null : 'program-{{ $candidate->id }}'; 
+                                                    $nextTick(() => $refs.candidateSwiper.swiper.updateAutoHeight())"
+                                                    class="w-full px-4 py-3 bg-gradient-to-r from-[#926AE1]/10 to-[#926AE1]/5 flex items-center justify-between hover:from-[#926AE1]/20 hover:to-[#926AE1]/10 transition-all">
+                                                    <div class="flex items-center gap-3">
+                                                        <i class="fa-solid fa-rocket text-[#4F22AA]"></i>
+                                                        <span class="font-semibold text-[#411C8C]">PROGRAM KERJA</span>
+                                                    </div>
+                                                    <i class="fa-solid fa-chevron-down text-[#4F22AA] transition-transform duration-300"
+                                                        :class="{ 'rotate-180': activeTab === 'program-{{ $candidate->id }}' }"></i>
+                                                </button>
+                                                <div x-show="activeTab === 'program-{{ $candidate->id }}'" x-collapse
+                                                    class="px-4 py-4 bg-white">
+                                                    <div class="scrollable-content">
+                                                        <p class="text-[#411C8C] leading-relaxed whitespace-pre-line">
+                                                            {{ $candidate->work_program }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-
         <!-- User Let Login -->
         <div class="bg-[#926AE1] bg-opacity-25 text-white py-12 sm:py-16">
             <div class="max-w-4xl mx-auto px-4">
                 <div class="flex flex-col items-center text-center gap-8">
                     <!-- Content -->
-                    <div class="max-w-[600px] text-[#411C8C]">
-                        <h2 class="text-4xl font-bold mb-4">
-                            Sudah Siap Untuk <br />
+                    <div class="max-w-[400px] text-[#411C8C]">
+                        <h2 class="text-2xl font-bold mb-4">
+                            Sudah Siap Untuk
                             Memberikan Suaramu?
                         </h2>
-                        <p class="text-lg">
+                        <p>
                             Dengan masuk, kamu bisa memberikan suaramu untuk kandidat
                             yang kamu pilih. Jangan sampai ketinggalan, yuk masuk sekarang!
                         </p>
@@ -272,8 +316,8 @@
         </div>
 
         <!-- User Let Login -->
-        <div class="text-[#411C8C] py-12 sm:py-8 ">
-            <div class="max-w-4xl mx-auto px-4">
+        <div class="text-[#411C8C]">
+            <div class="max-w-4xl mx-auto mt-8">
                 <div class="flex flex-col items-center text-center gap-8">
                     <!-- Content -->
                     <div
@@ -310,160 +354,87 @@
     </div>
 </body>
 
-<style>
-    /* Enhanced positioning for swiper buttons to appear on sides of candidate images */
-    .custom-swiper-button-prev,
-    .custom-swiper-button-next {
-        position: absolute;
-        z-index: 10;
-        width: 40px;
-        height: 40px;
-        background-color: rgba(255, 255, 255, 0.8);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        color: #4F22AA;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s ease;
-    }
-
-    .custom-swiper-button-prev:hover,
-    .custom-swiper-button-next:hover {
-        background-color: #4F22AA;
-        color: white;
-    }
-
-    /* Position buttons at the image level instead of at the top level */
-    .custom-swiper-button-prev {
-        left: 35px;
-        top: 300px;
-        /* This will be adjusted by JS to match image position */
-    }
-
-    .custom-swiper-button-next {
-        right: 35px;
-        top: 300px;
-        /* This will be adjusted by JS to match image position */
-    }
-
-    /* Maintain responsiveness */
-    @media (max-width: 640px) {
-
-        .custom-swiper-button-prev,
-        .custom-swiper-button-next {
-            width: 35px;
-            height: 35px;
-            top: 220px;
-            /* Adjust for smaller screens */
-        }
-    }
-</style>
-
-<style>
-    /* Styling untuk menyembunyikan slide yang tidak aktif */
-    .swiper-slide {
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.5s ease, visibility 0.5s ease;
-    }
-
-    .swiper-slide-active {
-        opacity: 1;
-        visibility: visible;
-    }
-</style>
 
 <script>
     function candidateCarousel() {
         return {
             swiper: null,
             init() {
-                // Wait for DOM to be fully loaded
-                setTimeout(() => {
-                    // Initialize Swiper with custom navigation
-                    this.swiper = new Swiper(this.$refs.candidateSwiper, {
-                        slidesPerView: 1,
-                        spaceBetween: 30,
-                        loop: true,
-                        autoHeight: true,
-                        observer: true,
-                        observeParents: true,
-                        pagination: {
-                            el: '.swiper-pagination',
-                            clickable: true,
-                        },
-                        navigation: {
-                            nextEl: '.custom-swiper-button-next',
-                            prevEl: '.custom-swiper-button-prev',
-                        },
-                        // Disable multiple slides per view
-                        breakpoints: {
-                            0: {
-                                slidesPerView: 1,
+                // Wait for DOM to be ready
+                this.$nextTick(() => {
+                    setTimeout(() => {
+                        this.swiper = new Swiper(this.$refs.candidateSwiper, {
+                            effect: 'cards',
+                            grabCursor: true,
+                            centeredSlides: true,
+                            slidesPerView: 1,
+                            autoHeight: true,
+                            cardsEffect: {
+                                perSlideRotate: 2,
+                                perSlideOffset: 8,
+                                slideShadows: true
                             },
-                            640: {
-                                slidesPerView: 1,
+                            loop: false,
+                            // Responsive breakpoints
+                            breakpoints: {
+                                // Mobile
+                                320: {
+                                    cardsEffect: {
+                                        perSlideRotate: 2,
+                                        perSlideOffset: 8,
+                                    }
+                                },
+                                // Tablet
+                                768: {
+                                    cardsEffect: {
+                                        perSlideRotate: 2,
+                                        perSlideOffset: 10,
+                                    }
+                                },
+                                // Desktop
+                                1024: {
+                                    cardsEffect: {
+                                        perSlideRotate: 2,
+                                        perSlideOffset: 12,
+                                    }
+                                }
                             },
-                            768: {
-                                slidesPerView: 1,
-                            },
-                            1024: {
-                                slidesPerView: 1,
-                            }
-                        },
-                        on: {
-                            init: function() {
-                                // Force update after initialization
-                                setTimeout(() => {
+                            on: {
+                                init: function() {
+                                    setTimeout(() => {
+                                        this.update();
+                                        this.updateAutoHeight();
+                                    }, 100);
+                                },
+                                resize: function() {
                                     this.update();
-                                }, 100);
-                            },
-                            slideChange: function() {
-                                // Swiper akan otomatis menambahkan class swiper-slide-active
-                                // pada slide yang aktif, dan CSS kita akan menangani visibilitas
+                                }
                             }
-                        }
-                    });
-
-                    // Add resize event listener to update swiper
-                    window.addEventListener('resize', () => {
-                        if (this.swiper) {
-                            this.swiper.update();
-                        }
-                    });
-                }, 0);
+                        });
+                    }, 100);
+                });
             }
         }
     }
 </script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Mendapatkan semua tombol "Lihat Selengkapnya"
-        const toggleButtons = document.querySelectorAll('.toggle-button');
+<style>
+    .candidate-swiper-container {
+        width: 100%;
+        overflow: hidden;
+    }
 
-        // Menambahkan event listener untuk setiap tombol
-        toggleButtons.forEach(function(button) {
-            button.addEventListener('click', function() {
-                const shortId = this.getAttribute('data-short');
-                const fullId = this.getAttribute('data-full');
+    .candidate-swiper {
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+    }
 
-                const shortText = document.getElementById(shortId);
-                const fullText = document.getElementById(fullId);
-
-                shortText.classList.toggle('hidden');
-                fullText.classList.toggle('hidden');
-
-                if (this.innerText === "Lihat Selengkapnya") {
-                    this.innerText = "Sembunyikan";
-                } else {
-                    this.innerText = "Lihat Selengkapnya";
-                }
-            });
-        });
-    });
-</script>
+    @media (max-width: 768px) {
+        .candidate-swiper {
+            max-width: 90%;
+        }
+    }
+</style>
 
 </html>

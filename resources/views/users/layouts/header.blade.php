@@ -2,9 +2,9 @@
 
 <!-- Header -->
 <header class="sticky w-full top-0 z-20">
-    <div class="px-8 pt-6">
+    <div class="lg:px-8 lg:pt-6">
         <div
-            class="bg-white/30 backdrop-blur-lg rounded-xl shadow-lg p-4 flex justify-between items-center">
+            class="bg-white/30 backdrop-blur-lg lg:rounded-xl shadow-lg p-4 flex justify-between items-center">
             <div class="flex items-center gap-4">
                 <button class="text-gray-600 hover:text-gray-800" id="sidebarToggle">
                     <i class="fa-solid fa-bars text-xl"></i>

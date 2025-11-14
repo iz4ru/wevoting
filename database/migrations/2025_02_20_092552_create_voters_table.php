@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('voters', function (Blueprint $table) {
-            $table->integer('user_id')->unique()->primary();
+            $table->id();
+            $table->integer('user_id')->unique();
             $table->uuid('uuid')->unique();
             $table->string('name');
             $table->string('class');

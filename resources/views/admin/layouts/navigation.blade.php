@@ -8,42 +8,42 @@
                 <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')"
                     class="flex items-center gap-3 px-6 py-3 border-white">
                     <i class="fa-solid fa-home"></i>
-                    <span class="font-semibold">Dasbor Utama</span>
+                    <span>Dasbor Utama</span>
                 </x-nav-link>
             </li>
             <li>
                 <x-nav-link href="{{ route('admin.mgmt') }}" :active="request()->routeIs(['admin.mgmt', 'admin.mgmt.create', 'admin.mgmt.show', 'admin.mgmt.form_password'])"
                     class="flex items-center gap-3 px-6 py-3 border-white">
                     <i class="fa-solid fa-users-gear"></i>
-                    <span class="font-semibold">Manajemen Admin</span>
+                    <span>Manajemen Admin</span>
                 </x-nav-link>
             </li>
             <li>
                 <x-nav-link href="{{ route('candidate') }}" :active="request()->routeIs(['candidate', 'candidate.create', 'candidate.show', 'candidate.preview'])"
                     class="flex items-center gap-3 px-6 py-3 border-white">
                     <i class="fa-solid fa-user-group"></i>
-                    <span class="font-semibold">Data Kandidat</span>
+                    <span>Data Kandidat</span>
                 </x-nav-link>
             </li>
             <li>
                 <x-nav-link href="{{ route('voter') }}" :active="request()->routeIs(['voter', 'voter.create', 'voter.show', 'voter.show.import'])"
                     class="flex items-center gap-3 px-6 py-3 border-white">
                     <i class="fa-solid fa-user-check"></i>
-                    <span class="font-semibold">Data Peserta Terpilih</span>
+                    <span>Data Peserta Terpilih</span>
                 </x-nav-link>
             </li>
             <li>
                 <x-nav-link href="{{ route('position') }}" :active="request()->routeIs(['position', 'position.create', 'position.show'])"
                     class="flex items-center gap-3 px-6 py-3 border-white">
                     <i class="fa-solid fa-list"></i>
-                    <span class="font-semibold">Data Posisi</span>
+                    <span>Data Posisi</span>
                 </x-nav-link>
             </li>
             <li>
                 <x-nav-link href="{{ route('logs') }}" :active="request()->routeIs('logs')"
                     class="flex items-center gap-3 px-6 py-3 border-white">
                     <i class="fa-solid fa-history"></i>
-                    <span class="font-semibold">Log Admin</span>
+                    <span>Log Admin</span>
                 </x-nav-link>
             </li>
         </ul>
@@ -57,28 +57,28 @@
                 <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')"
                     class="flex items-center gap-3 px-6 py-3 border-white">
                     <i class="fa-solid fa-home"></i>
-                    <span class="font-semibold">Dasbor Utama</span>
+                    <span>Dasbor Utama</span>
                 </x-nav-link>
             </li>
             <li>
                 <x-nav-link href="{{ route('candidate') }}" :active="request()->routeIs(['candidate', 'candidate.create', 'candidate.show', 'candidate.preview'])" 
                     class="flex items-center gap-3 px-6 py-3 border-white">
                     <i class="fa-solid fa-user-group"></i>
-                    <span class="font-semibold">Data Kandidat</span>
+                    <span>Data Kandidat</span>
                 </x-nav-link>
             </li>
             <li>
                 <x-nav-link href="{{ route('voter') }}" :active="request()->routeIs(['voter', 'voter.create', 'voter.show'])"
                     class="flex items-center gap-3 px-6 py-3 border-white">
                     <i class="fa-solid fa-user-check"></i>
-                    <span class="font-semibold">Data Peserta Terpilih</span>
+                    <span>Data Peserta Terpilih</span>
                 </x-nav-link>
             </li>
             <li>
                 <x-nav-link href="{{ route('position') }}" :active="request()->routeIs(['position', 'position.create', 'position.show'])"
                     class="flex items-center gap-3 px-6 py-3 border-white">
                     <i class="fa-solid fa-list"></i>
-                    <span class="font-semibold">Data Posisi</span>
+                    <span>Data Posisi</span>
                 </x-nav-link>
             </li>
         </ul>

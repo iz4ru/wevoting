@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LogController;
-use App\Http\Middleware\RoleMiddleware;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\VoterController;
@@ -105,7 +104,7 @@ Route::middleware('guest') -> group(function (){
 # -----------------------------------------------------------------------------------------------
 
 # Voter Authentication
-Route::middleware('guest')->group(function(){
+Route::middleware('voter.guest')->group(function(){
     Route::get('auth/voter', [VoterLoginController::class, 'index'])->name('voter.login');
     Route::post('auth/voter', [VoterLoginController::class, 'login_action'])->name('voter.login_action');
     Route::post('auth/voter/logout', [VoterLoginController::class, 'logout'])->name('voter.logout');
@@ -113,7 +112,7 @@ Route::middleware('guest')->group(function(){
 
 Route::get('voter/vote/success', [SuccessVoteController::class, 'index'])->name('vote.success');
 
-Route::middleware(['auth:voters']) -> group(function(){
+Route::middleware(['auth:voters', 'voter.validate']) -> group(function(){
     Route::get('voter/dashboard', [VotingController::class, 'index'])->name('voter.dashboard');
     Route::post('voter/dashboard/vote', [VotingController::class, 'vote'])->name('voter.voting');
     Route::get('voter/candidate/preview/{id}', [VotingController::class, 'previewCandidate'])->name('voter.candidate.preview');

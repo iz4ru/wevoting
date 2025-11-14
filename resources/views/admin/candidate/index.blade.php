@@ -67,9 +67,9 @@
                                                     </div>
                                                     <!-- Image -->
                                                     <div
-                                                        class="relative w-[240px] h-[240px] lg:w-[360px] lg:h-[360px] items-center justify-center my-4 bg-[#926AE1]/10 hover:bg-[#926AE1]/20 backdrop-blur-lg rounded-md transform transition ease-in-out">
+                                                        class="relative w-[240px] h-[240px] items-center justify-center my-4 bg-[#926AE1]/10 hover:bg-[#926AE1]/20 backdrop-blur-lg rounded-md transform transition ease-in-out">
                                                         <img src="{{ Storage::url('images/' . $candidate->image) }}"
-                                                            class="w-[240px] h-[240px] lg:w-[360px] lg:h-[360px] object-cover rounded-lg border border-gray-300 shadow-sm"
+                                                            class="w-[240px] h-[240px] object-cover rounded-lg border border-gray-300 shadow-sm"
                                                             alt="">
                                                     </div>
                                                     <!-- Progress Bar -->
@@ -208,7 +208,7 @@
                                         <div
                                             class="relative items-center justify-center my-4 bg-[#926AE1]/10 hover:bg-[#926AE1]/20 backdrop-blur-lg rounded-md transform transition ease-in-out">
                                             <img src="{{ Storage::url('images/' . $candidate->image) }}"
-                                                class="w-[320px] h-[320px] lg:w-[360px] lg:h-[360px] object-cover rounded-lg border border-gray-300 shadow-sm"
+                                                class="w-[320px] h-[320px] object-cover rounded-lg border border-gray-300 shadow-sm"
                                                 alt="">
                                         </div>
                                         <!-- Progress Bar -->

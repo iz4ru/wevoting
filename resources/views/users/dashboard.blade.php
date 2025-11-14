@@ -3,9 +3,9 @@
 @section('title', 'Dasbor Utama')
 
 @section('content')
-    <div class="flex-1 overflow-y-auto px-8 pt-6 pb-6">
+    <div class="flex-1 overflow-y-auto lg:px-8 lg:py-6">
         <div class="space-y-6">
-            <div class="flex flex-col bg-white/30 backdrop-blur-lg rounded-xl shadow-lg p-6">
+            <div class="flex flex-col bg-white/30 backdrop-blur-lg lg:rounded-xl shadow-lg lg:p-6">
                 <div class="bg-[#FFD164]/20 rounded-lg shadow-lg p-6 flex flex-row items-center gap-6">
                     <div class="flex items-center justify-center rounded-full">
                         <i class="fa fa-user-circle fa-2xl" aria-hidden="true" style="color: #C78D04"></i>
@@ -23,14 +23,14 @@
                 <!-- Alerts -->
                 @if (session('success'))
                     <div class="alert alert-success py-2 px-4 mb-8 bg-green-100 text-green-500 border border-green-500 rounded-md"
-                        role="alert" id="successAlert" x-data="{show: true}" x-init="setTimeout(() => show = false, 5000)" x-show="show">
+                        role="alert" id="successAlert" x-data="{ show: true }" x-init="setTimeout(() => show = false, 5000)" x-show="show">
                         <p>{{ session('success') }}</p>
                     </div>
                 @endif
 
                 @if (session('error'))
                     <div class="alert alert-error py-2 px-4 mb-8 bg-red-100 text-red-500 border border-red-500 rounded-md"
-                        role="alert" id="errorAlert" x-data="{show: true}" x-init="setTimeout(() => show = false, 5000)" x-show="show">
+                        role="alert" id="errorAlert" x-data="{ show: true }" x-init="setTimeout(() => show = false, 5000)" x-show="show">
                         <p>{{ session('error') }}</p>
                     </div>
                 @endif
@@ -42,9 +42,15 @@
                             <p>Tidak ada data yang ditemukan.</p>
                         </div>
                     @endif
-                    
+
                     <!-- Mobile Carousel View -->
-                    <div class="sm:hidden" x-data="candidateCarousel()">
+                    <div class="md:hidden" x-data="candidateCarousel()">
+                        <div class="mb-4 flex items-center justify-center gap-2 animate-bounce">
+                            <span class="text-[#C78D04] font-semibold animate-pulse">
+                                Geser Untuk Melihat Kandidat Lainnya
+                            </span>
+                            <i class="fa-solid fa-arrows-left-right text-[#C78D04] text-lg animate-pulse"></i>
+                        </div>
                         <!-- Swiper Container -->
                         <div class="w-full mx-auto relative" x-ref="candidateSwiper">
                             <!-- Swiper Wrapper -->
@@ -56,12 +62,14 @@
                                                 <div class="flex flex-col items-center justify-center">
                                                     <!-- Candidate Name and Position -->
                                                     <div class="text-center">
-                                                        <h3 class="text-xl my-1 font-bold text-gray-700">{{ $candidate->name }}</h3>
-                                                        <p class="text-gray-700 text-base">{{ $candidate->position->position_name }}</p>
+                                                        <h3 class="text-xl my-1 font-bold text-gray-700">
+                                                            {{ $candidate->name }}</h3>
+                                                        <p class="text-gray-700 text-base">
+                                                            {{ $candidate->position->position_name }}</p>
                                                     </div>
                                                     <!-- Image -->
                                                     <div
-                                                        class="relative w-[240px] h-[240px] lg:w-[360px] lg:h-[360px] items-center justify-center my-4 bg-[#FFB300]/10 hover:bg-[#FFB300]/20 backdrop-blur-lg rounded-md transform transition ease-in-out">
+                                                        class="relative w-[240px] h-[240px] items-center justify-center my-4 bg-[#FFB300]/10 hover:bg-[#FFB300]/20 backdrop-blur-lg rounded-md transform transition ease-in-out">
                                                         <img src="{{ Storage::url('images/' . $candidate->image) }}"
                                                             class="w-[240px] h-[240px] lg:w-[360px] lg:h-[360px] object-cover rounded-lg border border-gray-300 shadow-sm"
                                                             alt="">
@@ -90,23 +98,29 @@
                                                                 x-transition:enter-end="opacity-100 scale-100"
                                                                 x-transition:leave="transition ease-in duration-75 transform"
                                                                 x-transition:leave-start="opacity-100 scale-100"
-                                                                x-transition:leave-end="opacity-0 scale-95" @click.away="open = false"
-                                                                x-cloak
+                                                                x-transition:leave-end="opacity-0 scale-95"
+                                                                @click.away="open = false" x-cloak
                                                                 class="fixed top-0 left-0 w-full h-full rounded-xl flex justify-center items-center z-50">
                                                                 <div
                                                                     class="p-6 w-[80%] max-w-[540px] bg-white/90 backdrop-blur-lg border-gray-200 rounded-lg shadow-lg items-center justify-center">
-                                                                    <div class= "bg-[#22A06B]/20 backdrop-blur-lg py-2 rounded-lg">
+                                                                    <div
+                                                                        class= "bg-[#22A06B]/20 backdrop-blur-lg py-2 rounded-lg">
                                                                         <h2
                                                                             class="mb-2 text-xl font-bold text-[#22A06B] text-center px-4 translate-y-1">
                                                                             Konfirmasi Pilihan</h2>
                                                                     </div>
-                                                                    <hr class="rounded border-t-2 border-[#B8B8B8]/50 my-4 mx-full">
-                                                                    <p class="mb-6 font-medium text-gray-600 text-center">Yakin untuk
-                                                                        memilih kandidat ini? <br> Saat ini memilih kandidat:
+                                                                    <hr
+                                                                        class="rounded border-t-2 border-[#B8B8B8]/50 my-4 mx-full">
+                                                                    <p class="mb-6 font-medium text-gray-600 text-center">
+                                                                        Yakin untuk
+                                                                        memilih kandidat ini? <br> Saat ini memilih
+                                                                        kandidat:
                                                                         <br><span
-                                                                            class="font-semibold text-[#4F22AA]">({{ $candidate->name }}, {{ $candidate->position->position_name }})</span>
+                                                                            class="font-semibold text-[#4F22AA]">({{ $candidate->name }},
+                                                                            {{ $candidate->position->position_name }})</span>
                                                                     </p>
-                                                                    <form action="{{ route('voter.voting') }}" method="POST">
+                                                                    <form action="{{ route('voter.voting') }}"
+                                                                        method="POST">
                                                                         @csrf
 
                                                                         <input type="hidden" name="candidate_id"
@@ -115,7 +129,8 @@
                                                                         <div class="flex flex-row gap-2 justify-between">
                                                                             <button type="button" @click="open = false"
                                                                                 class="px-5 py-2.5 bg-gray-400 rounded-lg">
-                                                                                <span class="text-white font-semibold">Kembali</span>
+                                                                                <span
+                                                                                    class="text-white font-semibold">Kembali</span>
                                                                             </button>
                                                                             <button type="submit"
                                                                                 class="px-5 py-2.5 bg-[#22A06B] rounded-lg">
@@ -137,17 +152,19 @@
                             <!-- Pagination -->
                             <div class="swiper-pagination relative mt-4"></div>
                             <!-- Custom Navigation Buttons -->
-                            <div class="custom-swiper-button-prev absolute left-0 top-1/2 transform -translate-y-1/2 z-10 text-[#C78D04] w-10 h-10 rounded-full flex items-center justify-center cursor-pointer">
+                            <div
+                                class="custom-swiper-button-prev absolute left-0 top-1/2 transform -translate-y-1/2 z-10 text-[#C78D04] w-10 h-10 rounded-full flex items-center justify-center cursor-pointer">
                                 <i class="fa-solid fa-chevron-left"></i>
                             </div>
-                            <div class="custom-swiper-button-next absolute right-0 top-1/2 transform -translate-y-1/2 z-10 text-[#C78D04] w-10 h-10 rounded-full flex items-center justify-center cursor-pointer">
+                            <div
+                                class="custom-swiper-button-next absolute right-0 top-1/2 transform -translate-y-1/2 z-10 text-[#C78D04] w-10 h-10 rounded-full flex items-center justify-center cursor-pointer">
                                 <i class="fa-solid fa-chevron-right"></i>
                             </div>
                         </div>
                     </div>
 
                     <!-- Desktop Grid View -->
-                    <div class="hidden sm:grid px-2 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 md:grid-cols-1 gap-6 mb-8">
+                    <div class="hidden md:grid px-2 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                         @foreach ($candidates as $candidate)
                             <div class="bg-white/30 backdrop-blur-xl rounded-xl shadow-lg p-6">
                                 <div class="flex justify-center items-center">
@@ -155,13 +172,14 @@
                                         <!-- Candidate Name and Position -->
                                         <div class="text-center">
                                             <h3 class="text-xl my-1 font-bold text-gray-700">{{ $candidate->name }}</h3>
-                                            <p class="text-gray-700 text-base">{{ $candidate->position->position_name }}</p>
+                                            <p class="text-gray-700 text-base">{{ $candidate->position->position_name }}
+                                            </p>
                                         </div>
                                         <!-- Image -->
                                         <div
                                             class="relative items-center justify-center my-4 bg-[#FFB300]/10 hover:bg-[#FFB300]/20 backdrop-blur-lg rounded-md transform transition ease-in-out">
                                             <img src="{{ Storage::url('images/' . $candidate->image) }}"
-                                                class="w-[320px] h-[320px] lg:w-[360px] lg:h-[360px] object-cover rounded-lg border border-gray-300 shadow-sm"
+                                                class="w-[240px] h-[240px] object-cover rounded-lg border border-gray-300 shadow-sm"
                                                 alt="">
                                         </div>
                                         <!-- Action Buttons -->
@@ -202,7 +220,8 @@
                                                         <p class="mb-6 font-medium text-gray-600 text-center">Yakin untuk
                                                             memilih kandidat ini? <br> Saat ini memilih kandidat:
                                                             <br><span
-                                                                class="font-semibold text-[#4F22AA]">({{ $candidate->name }}, {{ $candidate->position->position_name }})</span>
+                                                                class="font-semibold text-[#4F22AA]">({{ $candidate->name }},
+                                                                {{ $candidate->position->position_name }})</span>
                                                         </p>
                                                         <form action="{{ route('voter.voting') }}" method="POST">
                                                             @csrf
@@ -235,36 +254,36 @@
             </div>
         </div>
 
-    <style>
-        /* Hide default Swiper navigation buttons */
-        .swiper-button-next,
-        .swiper-button-prev {
-            display: none;
-        }
-    </style>
+        <style>
+            /* Hide default Swiper navigation buttons */
+            .swiper-button-next,
+            .swiper-button-prev {
+                display: none;
+            }
+        </style>
 
-    <script>
-        // Alpine.js component for the carousel
-        function candidateCarousel() {
-            return {
-                swiper: null,
-                init() {
-                    // Initialize Swiper with custom navigation
-                    this.swiper = new Swiper(this.$refs.candidateSwiper, {
-                        slidesPerView: 1,
-                        spaceBetween: 30,
-                        loop: true,
-                        pagination: {
-                            el: '.swiper-pagination',
-                            clickable: true,
-                        },
-                        navigation: {
-                            nextEl: '.custom-swiper-button-next',
-                            prevEl: '.custom-swiper-button-prev',
-                        },
-                    });
+        <script>
+            // Alpine.js component for the carousel
+            function candidateCarousel() {
+                return {
+                    swiper: null,
+                    init() {
+                        // Initialize Swiper with custom navigation
+                        this.swiper = new Swiper(this.$refs.candidateSwiper, {
+                            slidesPerView: 1,
+                            spaceBetween: 30,
+                            loop: true,
+                            pagination: {
+                                el: '.swiper-pagination',
+                                clickable: true,
+                            },
+                            navigation: {
+                                nextEl: '.custom-swiper-button-next',
+                                prevEl: '.custom-swiper-button-prev',
+                            },
+                        });
+                    }
                 }
             }
-        }
-    </script>
-@endsection
+        </script>
+    @endsection

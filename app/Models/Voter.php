@@ -12,7 +12,6 @@ class Voter extends Authenticatable
     use HasFactory;
 
     protected $table = 'voters';
-    protected $primaryKey = 'user_id';
     protected $fillable = [
         'user_id',
         'uuid',

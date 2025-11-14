@@ -18,25 +18,37 @@ class VoterLoginController extends Controller
 
     public function login_action(Request $request)
     {
-        $access_code = $request->input('access_code');
-        $voter = Voter::where('access_code', $access_code)->first();
-    
+        $validated = $request->validate(
+            [
+                'user_id' => 'required|integer',
+                'access_code' => 'required|string',
+            ],
+            [
+                'user_id.required' => '❌ NIS / NO ID / NIP Awal wajib diisi!',
+                'user_id.integer' => '❌ NIS / NO ID / NIP Awal harus berupa angka!',
+                'access_code.required' => '❌ Kode akses wajib diisi!',
+                'access_code.string' => '❌ Kode akses harus berupa teks!',
+            ],
+        );
+
+        $voter = Voter::where([
+            'user_id' => $validated['user_id'],
+            'access_code' => $validated['access_code'],
+        ])->first();
+
         if (!$voter) {
-            return back()->with(['error' => '❌ Kode akses tidak valid!']);
+            return back()->withInput()->with(['error' => '❌ ID atau kode akses tidak valid!']);
         }
-    
-        // Cek apakah sesi pemilihan aktif
+
         $election = Election::first();
         if (!$election || !$election->is_active) {
             return back()->with(['error' => '❌ Sesi pemilihan belum dimulai, silahkan tunggu terlebih dahulu!']);
         }
-    
-        $hasVoted = VoteResult::where('id_voter', $voter->user_id)->exists();
-    
-        if ($hasVoted) {
+
+        if (VoteResult::where('id_voter', $voter->user_id)->exists()) {
             return back()->with(['error' => '❌ Maaf, Anda sudah memberikan suara!']);
         }
-    
+
         Auth::guard('voters')->login($voter);
         return redirect()->route('voter.dashboard')->with('success', '✅ Selamat datang, silahkan untuk memilih kandidat!');
     }
@@ -44,10 +56,10 @@ class VoterLoginController extends Controller
     public function logout(Request $request)
     {
         Auth::guard('voters')->logout();
-    
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-    
+
         return redirect()->route('voter.login')->with('success', '✅ Anda telah berhasil logout.');
     }
 }

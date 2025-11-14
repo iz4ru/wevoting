@@ -276,6 +276,7 @@ class VoterController extends Controller
         $this->logActivity($activity);
 
         $voter = Voter::where('uuid', $uuid)->firstOrFail();
+        VoteResult::where('id_voter', $voter->user_id)->delete();
         $voter->delete();
 
         return redirect()->route('voter')->with('success', '✅ Data berhasil dihapus!');
@@ -310,8 +311,8 @@ class VoterController extends Controller
         $activity = 'Truncate data pemilih';
         $this->logActivity($activity);
 
-        Voter::truncate();
         VoteResult::truncate();
+        Voter::truncate();
 
         return redirect()->back()->with('success', '✅ Semua user berhasil dihapus!');
     }
