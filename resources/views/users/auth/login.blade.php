@@ -65,7 +65,7 @@
                                 <div class="relative w-full">
                                     <i
                                         class="fa fa-id-badge absolute left-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
-                                    <input placeholder="Masukkan NIS / NO ID / NIP Awal" type="text" name="user_id"
+                                    <input placeholder="Masukkan NIS / NO ID / NIP Awal" type="number" name="user_id"
                                         id="user_id"
                                         class="text-sm w-full h-14 pl-12 placeholder:text-gray-300 border border-gray-300 focus:border-amber-500 focus:ring-amber-500 rounded-md shadow-sm"
                                         value="{{ old('user_id') }}" required autocomplete="off">
