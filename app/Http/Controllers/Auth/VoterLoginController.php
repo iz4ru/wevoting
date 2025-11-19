@@ -37,7 +37,9 @@ class VoterLoginController extends Controller
         ])->first();
 
         if (!$voter) {
-            return back()->withInput()->with(['error' => '❌ ID atau kode akses tidak valid!']);
+            return back()
+                ->withInput()
+                ->with(['error' => '❌ ID atau kode akses tidak valid!']);
         }
 
         $election = Election::first();
@@ -49,6 +51,12 @@ class VoterLoginController extends Controller
             return back()->with(['error' => '❌ Maaf, Anda sudah memberikan suara!']);
         }
 
+        // ===== TAMBAHKAN INI: Force logout admin jika ada =====
+        if (Auth::guard('web')->check()) {
+            Auth::guard('web')->logout();
+        }
+        // ======================================================
+
         Auth::guard('voters')->login($voter);
         return redirect()->route('voter.dashboard')->with('success', '✅ Selamat datang, silahkan untuk memilih kandidat!');
     }
@@ -57,7 +65,6 @@ class VoterLoginController extends Controller
     {
         Auth::guard('voters')->logout();
 
-        $request->session()->invalidate();
         $request->session()->regenerateToken();
 
         return redirect()->route('voter.login')->with('success', '✅ Anda telah berhasil logout.');

@@ -1,7 +1,7 @@
 <!-- resources/views/users/layouts/navigation.blade.php -->
 
 <!-- Navigation -->
-    <nav class="flex-1 overflow-y-auto">
+    {{-- <nav class="flex-1 overflow-y-auto">
         <ul class="">
             <li>
                 <x-nav-link href="{{ route('voter.dashboard') }}" :active="request()->routeIs(['voter.dashboard', 'voter.candidate.preview'])"
@@ -11,7 +11,7 @@
                 </x-nav-link>
             </li>
         </ul>
-    </nav>
+    </nav> --}}
     </div>
 
 <!-- Overlay for mobile when sidebar is open -->

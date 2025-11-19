@@ -1,13 +1,11 @@
 <!-- resources/views/users/layouts/header.blade.php -->
 
-<!-- Header -->
 <header class="sticky w-full top-0 z-20">
     <div class="lg:px-8 lg:pt-6">
-        <div
-            class="bg-white/30 backdrop-blur-lg lg:rounded-xl shadow-lg p-4 flex justify-between items-center">
+        <div class="bg-white/30 backdrop-blur-lg lg:rounded-xl shadow-lg p-4 flex justify-between items-center">
             <div class="flex items-center gap-4">
                 <button class="text-gray-600 hover:text-gray-800" id="sidebarToggle">
-                    <i class="fa-solid fa-bars text-xl"></i>
+                    {{-- <i class="fa-solid fa-bars text-xl"></i> --}}
                 </button>
                 <h1 class="text-base lg:text-xl font-bold text-gray-700">@yield('title', 'Admin')</h1>
             </div>
@@ -16,13 +14,27 @@
                     <p class="font-medium text-sm lg:text-base text-gray-700 break-words">
                         {{ Auth::user()->name }}</p>
                 </div>
-                <div x-data="{ open: false }" class="relative">
+                <div x-data="{ 
+                        open: false, 
+                        isFullscreen: localStorage.getItem('fullscreenMode') === 'true'
+                     }" 
+                     x-init="
+                        // Sync state saat fullscreen berubah
+                        document.addEventListener('fullscreenchange', () => {
+                            isFullscreen = !!document.fullscreenElement;
+                        });
+                        document.addEventListener('webkitfullscreenchange', () => {
+                            isFullscreen = !!document.webkitFullscreenElement;
+                        });
+                     "
+                     class="relative">
                     <button @click="open = !open"
                         class="w-10 h-10 bg-gray-200 rounded-full overflow-hidden">
                         <img src="{{ Storage::url('avatars/' . Auth::user()->avatar) }}" alt="Profile"
                         class="w-full h-full object-cover"
                         onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=ffb300&color=fff'">
                     </button>
+                    
                     <!-- Dropdown Menu -->
                     <div x-show="open"
                     x-transition:enter="transition ease-out duration-100 transform"
@@ -34,11 +46,12 @@
                     @click.away="open = false" 
                     x-cloak
                         class="absolute backdrop-blur-lg right-0 w-48 bg-[#FAFAFA]/90 shadow-lg rounded-lg p-2 z-50 transition transisiton-transform duration-300 ease-in-out">
-                        <div class="">
+                        <div class="space-y-1">
+                            <!-- Logout Button -->
                             <form action="{{ route('voter.logout') }}" method="POST"
                                 onsubmit="validateForm(event)">
                                 @csrf
-                                <button action="submit"
+                                <button type="submit"
                                     class="flex items-center gap-4 w-full rounded-md px-4 py-2 text-gray-500 hover:bg-gray-200">
                                     <i class="fa-solid fa-right-from-bracket text-gray-500 text-md"></i>
                                     <span>Logout</span>

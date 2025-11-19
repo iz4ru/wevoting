@@ -21,29 +21,28 @@ class VoterController extends Controller
     public function index(Request $request)
     {
         $query = Voter::query();
-    
+
         // Filter berdasarkan kelas jika ada
         if ($request->filled('class')) {
             $query->where('class', $request->class);
         }
-    
+
         // Filter berdasarkan jurusan jika ada
         if ($request->filled('vocation')) {
             $query->where('vocation', $request->vocation);
         }
-    
+
         // Ambil data setelah filter diterapkan
         $x['voters'] = $query->get();
-    
+
         // Ambil daftar unik kelas dan jurusan dari database
         $x['classes'] = Voter::select('class')->distinct()->pluck('class');
         $x['vocations'] = Voter::select('vocation')->distinct()->pluck('vocation');
-    
+
         $x['subtitle'] = 'Data Users Voting';
-    
+
         return view('admin.voter.index', $x);
     }
-    
 
     public function logActivity($activity)
     {
@@ -111,7 +110,7 @@ class VoterController extends Controller
     {
         $activity = 'Export data pemilih';
         $this->logActivity($activity);
-        
+
         return Excel::download(new VoterExport(), 'voters_' . now()->format('d-M-Y_H-i') . '.xlsx');
 
         return redirect()->route('voter')->with('success', '✅ Data pemilih berhasil diekspor!');
@@ -198,7 +197,7 @@ class VoterController extends Controller
             'name' => $validatedData['name'],
             'class' => $validatedData['class'],
             'vocation' => $validatedData['vocation'],
-            'access_code' => Str::upper(Str::random(8)),
+            'access_code' => Str::upper(Str::random(6)),
         ]);
 
         return redirect()->route('voter')->with('success', '✅ User berhasil ditambahkan!');
@@ -320,5 +319,37 @@ class VoterController extends Controller
     public function loadByValidation(Request $request)
     {
         $data = Voter::where('validation', $request->validation)->get();
+    }
+
+    public function showSearchPage()
+    {
+        return view('search-code');
+    }
+
+    public function searchVoterByUserID(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|string',
+        ]);
+
+        $userId = $request->input('user_id');
+
+        // Search voter by exact user_id match
+        $voter = Voter::where('user_id', $userId)->select('uuid', 'user_id', 'name', 'class', 'vocation', 'access_code')->first();
+
+        if ($voter) {
+            return response()->json([
+                'success' => true,
+                'voter' => $voter,
+            ]);
+        } else {
+            return response()->json(
+                [
+                    'success' => false,
+                    'message' => 'Data tidak ditemukan. Pastikan NIS/NO ID/NIP yang Anda masukkan benar.',
+                ],
+                404,
+            );
+        }
     }
 }

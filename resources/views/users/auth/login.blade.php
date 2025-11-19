@@ -19,11 +19,48 @@
     <!-- Script JS -->
     <script src="//unpkg.com/alpinejs" defer></script>
 
+        <!-- PWA  -->
+    <meta name="theme-color" content="#000000" />
+    <link rel="apple-touch-icon" href="{{ asset('images/icons/icon-192x192.png') }}">
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+
     <title>Users - Wevoting</title>
+
+    <style>
+        /* Fullscreen Button Style */
+        #fullscreen-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 179, 0, 0.9);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        #fullscreen-btn:hover {
+            background: #C78D04;
+            transform: scale(1.05);
+        }
+
+        #fullscreen-btn i {
+            color: white;
+            font-size: 18px;
+        }
+    </style>
 </head>
 
 <body class="bg-[#FAFAFA] min-h-screen flex flex-col"
     style="background-image: url('{{ asset('img/bg-login.png') }}'); background-size: cover; background-position: center;">
+
     <div class="flex-1 flex flex-col">
         <!-- Header with Back Button and Logo -->
         <div class="p-6">
@@ -32,7 +69,6 @@
                     <i class="fa-solid fa-chevron-left text-xl"></i>
                 </a>
                 <i class="fa-solid fa-check-to-slot fa-2xl pr-2" style="color: #4F22AA;"></i>
-                {{-- <img src="{{ asset('img/logo.png') }}" alt="Wevoting Logo" class="w-8 h-8"> --}}
             </div>
         </div>
 
@@ -65,7 +101,7 @@
                                 <div class="relative w-full">
                                     <i
                                         class="fa fa-id-badge absolute left-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
-                                    <input placeholder="Masukkan NIS / NO ID / NIP Awal" type="text" name="user_id"
+                                    <input placeholder="Masukkan NIS / NO ID / NIP" type="text" name="user_id"
                                         id="user_id"
                                         class="text-sm w-full h-14 pl-12 placeholder:text-gray-300 border border-gray-300 focus:border-amber-500 focus:ring-amber-500 rounded-md shadow-sm"
                                         value="{{ old('user_id') }}" required autocomplete="off">
@@ -102,22 +138,7 @@
                             @endif
 
                             <script>
-                                const passwordInput = document.getElementById("password");
-                                const togglePassword = document.getElementById("togglePassword");
-
-                                togglePassword.addEventListener("click", function() {
-                                    if (passwordInput.type === "password") {
-                                        passwordInput.type = "text";
-                                        this.classList.replace("fa-eye", "fa-eye-slash"); // Ganti ikon jadi 'mata tertutup'
-                                    } else {
-                                        passwordInput.type = "password";
-                                        this.classList.replace("fa-eye-slash", "fa-eye"); // Balikin ke 'mata terbuka'
-                                    }
-                                });
-                            </script>
-
-                            <script>
-                                // Menghilangkan alert setelah 1 detik
+                                // Menghilangkan alert setelah 3 detik
                                 setTimeout(function() {
                                     var successAlert = document.getElementById('successAlert');
                                     if (successAlert) {
@@ -153,7 +174,21 @@
     <div class="py-6 text-center text-gray-500 text-sm">
         &copy; Wevoting 2025 by iz4ru
     </div>
-    </div>
+
+        <!-- Konten -->
+    <script>
+        // Register service worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/serviceworker.js')
+                .then(function(registration) {
+                    console.log('Service Worker registered!', registration.scope);
+                })
+                .catch(function(error) {
+                    console.log('Service Worker registration failed:', error);
+                });
+        }
+    </script>
+
 </body>
 
 </html>

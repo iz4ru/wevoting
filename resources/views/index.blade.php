@@ -42,6 +42,11 @@
     <!-- Swiper -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
+    <!-- PWA  -->
+    <meta name="theme-color" content="#000000" />
+    <link rel="apple-touch-icon" href="{{ asset('images/icons/icon-192x192.png') }}">
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+
     <title>Wevoting</title>
 </head>
 
@@ -70,19 +75,26 @@
                     @click.away="open = false" x-cloak
                     class="absolute right-0 w-48 bg-[#FAFAFA] shadow-lg rounded-lg p-2 z-50 transition transisiton-transform duration-300 ease-in-out">
                     <div class="">
+                        <a href="{{ route('voter.search') }}"
+                            class="flex items-center gap-4 w-full rounded-md px-4 py-2 text-gray-500 hover:bg-gray-200">
+                            <i class="fa-solid fa-qrcode text-gray-500 text-md"></i>
+                            <span>Cari Kode Akses</span>
+                        </a>
+                    </div>
+                    <div class="">
                         <a href="#candidate"
                             class="flex items-center gap-4 w-full rounded-md px-4 py-2 text-gray-500 hover:bg-gray-200">
                             <i class="fa-solid fa-user text-gray-500 text-md"></i>
                             <span>Kandidat</span>
                         </a>
                     </div>
-                    <div class="">
+                    {{-- <div class="">
                         <a href="/login-user"
                             class="flex items-center gap-4 w-full rounded-md px-4 py-2 text-gray-500 hover:bg-gray-200">
                             <i class="fa-solid fa-right-from-bracket text-gray-500 text-md"></i>
                             <span>Masuk</span>
                         </a>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </nav>
@@ -305,7 +317,7 @@
 
                     <!-- Button -->
                     <div>
-                        <a href="{{ route('voter.login') }}"
+                        <a href="#candidate"
                             class="bg-[#612AD0] text-[#FAFAFA] px-12 py-4 rounded-md text-sm font-bold hover:bg-[#4F22AA] transition-colors flex items-center gap-2">
                             Mulai Voting
                             <i class="fa-solid fa-chevron-right fa-sm"></i>
@@ -352,6 +364,20 @@
         </footer>
 
     </div>
+    
+    <!-- Konten -->
+    <script>
+        // Register service worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/serviceworker.js')
+                .then(function(registration) {
+                    console.log('Service Worker registered!', registration.scope);
+                })
+                .catch(function(error) {
+                    console.log('Service Worker registration failed:', error);
+                });
+        }
+    </script>
 </body>
 
 

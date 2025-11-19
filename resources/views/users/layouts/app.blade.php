@@ -21,7 +21,7 @@
         }
     </style>
     <link rel="stylesheet" href="//cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     @livewireStyles
     @livewireScripts
 
@@ -37,12 +37,16 @@
     <!-- Swiper -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
+    <!-- PWA  -->
+    <meta name="theme-color" content="#000000" />
+    <link rel="apple-touch-icon" href="{{ asset('images/icons/icon-192x192.png') }}">
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+
     <title>@yield('title', 'Users') - Wevoting</title>
 </head>
 
 <body class="bg-[#FAFAFA] h-screen relative">
     <!-- Sidebar -->
-    @include('users.layouts.sidebar')
     <main class="flex flex-col min-h-screen">
 
         <!-- Navigation -->
@@ -50,7 +54,7 @@
 
         <!-- Main Content - Responsive layout -->
         <div id="mainContent"
-            class="flex-1 flex flex-col w-full transition-all duration-300 ease-in-out relative z-10 ml-72 overflow-y-auto">
+            class="flex-1 flex flex-col w-full transition-all duration-300 ease-in-out relative z-10 overflow-y-auto">
             <!-- Header - Sticky position -->
             @include('users.layouts.header')
 
@@ -66,19 +70,19 @@
             document.addEventListener('DOMContentLoaded', function() {
                 // Mendapatkan semua tombol "Lihat Selengkapnya"
                 const toggleButtons = document.querySelectorAll('.toggle-button');
-                
+
                 // Menambahkan event listener untuk setiap tombol
                 toggleButtons.forEach(function(button) {
                     button.addEventListener('click', function() {
                         const shortId = this.getAttribute('data-short');
                         const fullId = this.getAttribute('data-full');
-                        
+
                         const shortText = document.getElementById(shortId);
                         const fullText = document.getElementById(fullId);
-                        
+
                         shortText.classList.toggle('hidden');
                         fullText.classList.toggle('hidden');
-                        
+
                         if (this.innerText === "Lihat Selengkapnya") {
                             this.innerText = "Sembunyikan";
                         } else {
@@ -203,6 +207,20 @@
             }
         </script>
     </main>
+
+    <!-- Konten -->
+    <script>
+        // Register service worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/serviceworker.js')
+                .then(function(registration) {
+                    console.log('Service Worker registered!', registration.scope);
+                })
+                .catch(function(error) {
+                    console.log('Service Worker registration failed:', error);
+                });
+        }
+    </script>
 
 </body>
 

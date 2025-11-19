@@ -11,22 +11,24 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminLoginController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         $adminExists = User::where('role', 'admin')->exists();
         return view('admin.auth.login', compact('adminExists'));
     }
 
-    public function registerFirstAdmin() {
-            $adminExists = User::where('role', 'admin')->exists();
+    public function registerFirstAdmin()
+    {
+        $adminExists = User::where('role', 'admin')->exists();
 
-            if ($adminExists) {
-                return redirect()->route('admin.login')->with('error', '❌ Admin sudah terdaftar! Silakan login dengan akun yang ada.');
+        if ($adminExists) {
+            return redirect()->route('admin.login')->with('error', '❌ Admin sudah terdaftar! Silakan login dengan akun yang ada.');
         }
-            return view('admin.auth.register');
-        }
+        return view('admin.auth.register');
+    }
 
-        public function storeFirstAdmin(Request $request) {
-            
+    public function storeFirstAdmin(Request $request)
+    {
         if ($request->password !== $request->password_confirmation) {
             return back()->with('error', '❌ Password dan konfirmasi password tidak cocok!');
         } elseif (strlen($request->password) < 8) {
@@ -40,10 +42,11 @@ class AdminLoginController extends Controller
             'password_confirmation' => 'required|string|min:8|same:password',
         ]);
 
-
         $adminExists = User::where('role', 'admin')->exists();
         if ($adminExists) {
-            return redirect()->route('admin.login' ?: 'login')->with('error', '⚠️ Admin ini sudah ada!');
+            return redirect()
+                ->route('admin.login' ?: 'login')
+                ->with('error', '⚠️ Admin ini sudah ada!');
         }
 
         // Generate username dari name
@@ -67,15 +70,25 @@ class AdminLoginController extends Controller
         return redirect()->route('admin.login')->with('success', '✅ Akun admin berhasil dibuat! Silahkan login dengan akun yang baru saja dibuat.');
     }
 
-
-    public function login_action(Request $request) {
+    public function login_action(Request $request)
+    {
         $credentials = $request->validate([
             'email' => 'required|email',
-            'password' => 'required'
+            'password' => 'required',
         ]);
+
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('dashboard')->with('success', '✅ Login berhasil, Selamat datang kembali '.Auth::user()->name.' !');
+
+            // ===== TAMBAHKAN INI: Force logout voter jika ada =====
+            if (Auth::guard('voters')->check()) {
+                Auth::guard('voters')->logout();
+            }
+            // ======================================================
+
+            return redirect()
+                ->intended('dashboard')
+                ->with('success', '✅ Login berhasil, Selamat datang kembali ' . Auth::user()->name . ' !');
         }
 
         return back()->with([
@@ -83,11 +96,12 @@ class AdminLoginController extends Controller
         ]);
     }
 
-    public function logout(Request $request) {
+    public function logout(Request $request)
+    {
         Auth::logout();
 
         $request->session()->invalidate();
-        $request->session()->regenerateToken(); 
+        $request->session()->regenerateToken();
 
         return redirect()->route('admin.login')->with('success', '✅ Logout berhasil, sampai jumpa kembali !');
         return view('admin.auth.login');

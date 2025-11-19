@@ -80,13 +80,13 @@ class VotingController extends Controller
         return back()->with('success', '🗳️⛔ Sesi pemilihan telah ditutup.');
     }
 
-    public function previewCandidate($id)
-    {
-        $x['subtitle'] = 'Detail Kandidat';
-        $candidate = Candidate::findOrFail($id);
-        $positions = Position::all();
-        return view('users.preview', compact('candidate', 'positions'), $x);
-    }
+    // public function previewCandidate($id)
+    // {
+    //     $x['subtitle'] = 'Detail Kandidat';
+    //     $candidate = Candidate::findOrFail($id);
+    //     $positions = Position::all();
+    //     return view('users.preview', compact('candidate', 'positions'), $x);
+    // }
 
     public function vote(Request $request)
     {
@@ -135,10 +135,9 @@ class VotingController extends Controller
             ]);
         });
 
-        // Logout dari semua device
+        // Logout hanya guard voters, JANGAN invalidate seluruh session
         Auth::guard('voters')->logout();
-        $request->session()->forget('access_code');
-        $request->session()->invalidate();
+
         $request->session()->regenerateToken();
 
         return redirect()->route('vote.success')->with('success', '✅ Terima kasih sudah memberikan suara!');

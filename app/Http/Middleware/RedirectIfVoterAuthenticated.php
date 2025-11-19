@@ -15,20 +15,23 @@ class RedirectIfVoterAuthenticated
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    
+
     public function handle(Request $request, Closure $next, $guard = 'voters')
     {
+        // Jika ada user admin yang login, jangan redirect
+        if (Auth::guard('web')->check()) {
+            return $next($request);
+        }
+
         // Cek jika sudah login sebagai voter
         if (Auth::guard($guard)->check()) {
             $user = Auth::guard($guard)->user();
-            
-            // Validasi ulang status voter dari database
+
             $voter = Voter::where([
                 'user_id' => $user->user_id,
                 'access_code' => $user->access_code,
             ])->first();
 
-            // Jika voter tidak ditemukan atau sudah vote, logout forced
             if (!$voter || $voter->validation === 'sudah') {
                 Auth::guard($guard)->logout();
                 $request->session()->forget('access_code');

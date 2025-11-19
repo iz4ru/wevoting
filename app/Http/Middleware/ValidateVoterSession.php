@@ -18,6 +18,16 @@ class ValidateVoterSession
 
     public function handle(Request $request, Closure $next): Response
     {
+        // ===== TAMBAHKAN INI: Cek jika admin login, logout voter =====
+        if (Auth::guard('web')->check()) {
+            if (Auth::guard('voters')->check()) {
+                Auth::guard('voters')->logout();
+            }
+            return redirect()->route('dashboard')
+                ->with('info', 'ℹ️ Anda sudah login sebagai admin.');
+        }
+        // ==============================================================
+
         if (Auth::guard('voters')->check()) {
             $user = Auth::guard('voters')->user();
 
@@ -26,11 +36,12 @@ class ValidateVoterSession
                 'access_code' => $user->access_code,
             ])->first();
 
-            // Jika voter tidak valid atau sudah vote, logout
             if (!$voter || $voter->validation === 'sudah') {
                 Auth::guard('voters')->logout();
-                $request->session()->forget('access_code');
-                return redirect()->route('voter.login')->with('error', '❌ Sesi telah berakhir atau Anda sudah memberikan suara!');
+                $request->session()->regenerateToken();
+                
+                return redirect()->route('voter.login')
+                    ->with('error', '❌ Sesi telah berakhir atau Anda sudah memberikan suara!');
             }
         }
 

@@ -36,6 +36,11 @@
     <!-- Swiper -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
+        <!-- PWA  -->
+    <meta name="theme-color" content="#000000" />
+    <link rel="apple-touch-icon" href="{{ asset('images/icons/icon-192x192.png') }}">
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+
     <title>Login - Wevoting</title>
 </head>
 <body class="bg-[#FAFAFA] min-h-screen flex flex-col" style="background-image: url('{{ asset('img/bg-login.png') }}'); background-size: cover; background-position: center;">
@@ -101,5 +106,19 @@
             © Wevoting 2025 by iz4ru
         </div>
     </div>
+
+        <!-- Konten -->
+    <script>
+        // Register service worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/serviceworker.js')
+                .then(function(registration) {
+                    console.log('Service Worker registered!', registration.scope);
+                })
+                .catch(function(error) {
+                    console.log('Service Worker registration failed:', error);
+                });
+        }
+    </script>
 </body>
 </html>

@@ -23,7 +23,7 @@ class VoterImport implements ToModel, WithHeadingRow
             'vocation' => $row['vocation'],
             'access_code' => isset($row['access_code']) && !empty($row['access_code']) 
             ? $row['access_code'] 
-            : Str::upper(Str::random(8)), // Generate kode acak jika tidak ada
+            : Str::upper(Str::random(6)), // Generate kode acak jika tidak ada
         ]);
     }
 }
