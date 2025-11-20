@@ -1,7 +1,7 @@
 {
     "name": "Wevoting",
     "short_name": "Wevoting",
-    "start_url": "/",
+    "start_url": "/auth/voter",
     "scope": "/",
     "display": "standalone",
     "background_color": "#FAFAFA",
