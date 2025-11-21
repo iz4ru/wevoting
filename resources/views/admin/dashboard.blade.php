@@ -23,49 +23,53 @@
 
             <!-- Election Session Toggle -->
             @if (Auth::user()->role == 'admin')
-            <div class="bg-white/30 backdrop-blur-lg rounded-xl shadow-lg p-6">
-                <div class="flex justify-between items-center">
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 bg-[#926AE1]/20 rounded-lg flex items-center justify-center">
-                            <i class="fa-solid fa-bullhorn text-[#411C8C] text-xl"></i>
+                <div class="bg-white/30 backdrop-blur-lg rounded-xl shadow-lg p-6">
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-[#926AE1]/20 rounded-lg flex items-center justify-center">
+                                <i class="fa-solid fa-bullhorn text-[#411C8C] text-xl"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-lg font-bold text-gray-700">Mulai Sesi Pemilihan</h2>
+                                <p class="text-sm text-gray-500">Aktifkan dengan sekali klik</p>
+                            </div>
                         </div>
-                        <div>
-                            <h2 class="text-lg font-bold text-gray-700">Mulai Sesi Pemilihan</h2>
-                            <p class="text-sm text-gray-500">Aktifkan dengan sekali klik</p>
-                        </div>
+
+                        @php
+                            $election = App\Models\Election::first();
+                        @endphp
+
+                        @if ($election && $election->is_active)
+                            <!-- Jika aktif, tampilkan tombol untuk mematikan sesi -->
+                            <form action="{{ route('election.stop') }}" method="GET" id="stop-form">
+                                @csrf
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer" checked
+                                        onchange="document.getElementById('stop-form').submit();">
+                                    <div
+                                        class="w-14 h-7 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full 
+                                    peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white 
+                                    after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-[#7C3AED]">
+                                    </div>
+                                </label>
+                            </form>
+                        @else
+                            <!-- Jika tidak aktif, tampilkan tombol untuk memulai sesi -->
+                            <form action="{{ route('election.start') }}" method="GET" id="start-form">
+                                @csrf
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer"
+                                        onchange="document.getElementById('start-form').submit();">
+                                    <div
+                                        class="w-14 h-7 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full 
+                                    peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white 
+                                    after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-[#7C3AED]">
+                                    </div>
+                                </label>
+                            </form>
+                        @endif
                     </div>
-            
-                    @php
-                        $election = App\Models\Election::first();
-                    @endphp
-            
-                    @if ($election && $election->is_active)
-                        <!-- Jika aktif, tampilkan tombol untuk mematikan sesi -->
-                        <form action="{{ route('election.stop') }}" method="GET" id="stop-form">
-                            @csrf
-                            <label class="relative inline-flex items-center cursor-pointer">
-                                <input type="checkbox" class="sr-only peer" checked onchange="document.getElementById('stop-form').submit();">
-                                <div class="w-14 h-7 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full 
-                                    peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white 
-                                    after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-[#7C3AED]">
-                                </div>
-                            </label>
-                        </form>
-                    @else
-                        <!-- Jika tidak aktif, tampilkan tombol untuk memulai sesi -->
-                        <form action="{{ route('election.start') }}" method="GET" id="start-form">
-                            @csrf
-                            <label class="relative inline-flex items-center cursor-pointer">
-                                <input type="checkbox" class="sr-only peer" onchange="document.getElementById('start-form').submit();">
-                                <div class="w-14 h-7 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full 
-                                    peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white 
-                                    after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-[#7C3AED]">
-                                </div>
-                            </label>
-                        </form>
-                    @endif
                 </div>
-            </div>            
             @endif
 
             <!-- Statistics Cards -->
@@ -192,72 +196,74 @@
 
 
             <!-- Charts Section -->
-            <div class="grid grid-cols-1 gap-6">
-                <!-- Graph -->
-                <div class="bg-white/30 backdrop-blur-lg rounded-xl shadow-lg p-6">
-                    <h2 class="text-xl font-bold text-gray-700 mb-2">Grafik Perolehan Suara</h2>
-                    <p class="text-sm text-gray-500 mb-2">Lihat grafik perolehan suara setiap kandidat.</p>
-                    <div id="voteChart" class="h-64"></div>
-                </div>
+            @if (Auth::user()->role == 'admin')
+                <div class="grid grid-cols-1 gap-6">
+                    <!-- Graph -->
+                    <div class="bg-white/30 backdrop-blur-lg rounded-xl shadow-lg p-6">
+                        <h2 class="text-xl font-bold text-gray-700 mb-2">Grafik Perolehan Suara</h2>
+                        <p class="text-sm text-gray-500 mb-2">Lihat grafik perolehan suara setiap kandidat.</p>
+                        <div id="voteChart" class="h-64"></div>
+                    </div>
 
-                <!-- Candidate Results -->
-                <div class="bg-white/30 backdrop-blur-lg rounded-xl shadow-lg p-6">
-                    <h2 class="text-xl font-bold text-gray-700 mb-2">Persentase Perolehan Suara</h2>
-                    <p class="text-sm text-gray-500 mb-4">Lihat persentase perolehan suara setiap kandidat.</p>
+                    <!-- Candidate Results -->
+                    <div class="bg-white/30 backdrop-blur-lg rounded-xl shadow-lg p-6">
+                        <h2 class="text-xl font-bold text-gray-700 mb-2">Persentase Perolehan Suara</h2>
+                        <p class="text-sm text-gray-500 mb-4">Lihat persentase perolehan suara setiap kandidat.</p>
 
-                    <div class="space-y-6">
-                        @php
-                            $colors = [
-                                'bg-[#22A06B]',
-                                'bg-[#7C3AED]',
-                                'bg-[#FFB300]',
-                                'bg-[#EF4444]',
-                                'bg-[#1D7AFC]',
-                                'bg-[#EC4899]',
-                            ];
-                            $totalVotes = array_sum($voteCounts);
-                        @endphp
-
-                        @foreach ($candidate as $index => $c)
+                        <div class="space-y-6">
                             @php
-                                $votes = 0;
-                                $percentage = 0;
-                                $colorIndex = $index % count($colors);
+                                $colors = [
+                                    'bg-[#22A06B]',
+                                    'bg-[#7C3AED]',
+                                    'bg-[#FFB300]',
+                                    'bg-[#EF4444]',
+                                    'bg-[#1D7AFC]',
+                                    'bg-[#EC4899]',
+                                ];
+                                $totalVotes = array_sum($voteCounts);
+                            @endphp
 
-                                foreach ($votesByCandidate as $voteData) {
-                                    // Cek apakah voteData itu array atau object
-                                    if (is_array($voteData)) {
-                                        if ($voteData['id_candidate'] == $c->id) {
-                                            $votes = $voteData['total_votes'];
-                                            break;
-                                        }
-                                    } else {
-                                        if ($voteData->id_candidate == $c->id) {
-                                            $votes = $voteData->total_votes;
-                                            break;
+                            @foreach ($candidate as $index => $c)
+                                @php
+                                    $votes = 0;
+                                    $percentage = 0;
+                                    $colorIndex = $index % count($colors);
+
+                                    foreach ($votesByCandidate as $voteData) {
+                                        // Cek apakah voteData itu array atau object
+                                        if (is_array($voteData)) {
+                                            if ($voteData['id_candidate'] == $c->id) {
+                                                $votes = $voteData['total_votes'];
+                                                break;
+                                            }
+                                        } else {
+                                            if ($voteData->id_candidate == $c->id) {
+                                                $votes = $voteData->total_votes;
+                                                break;
+                                            }
                                         }
                                     }
-                                }
 
-                                if ($totalVotes > 0) {
-                                    $percentage = round(($votes / $totalVotes) * 100, 1);
-                                }
-                            @endphp
-                            <div>
-                                <div class="flex justify-between mb-2">
-                                    <span class="font-medium text-gray-700">{{ $c->name }}</span>
-                                    <span class="font-medium text-gray-700">{{ $percentage }}%</span>
+                                    if ($totalVotes > 0) {
+                                        $percentage = round(($votes / $totalVotes) * 100, 1);
+                                    }
+                                @endphp
+                                <div>
+                                    <div class="flex justify-between mb-2">
+                                        <span class="font-medium text-gray-700">{{ $c->name }}</span>
+                                        <span class="font-medium text-gray-700">{{ $percentage }}%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-4">
+                                        <div class="{{ $colors[$colorIndex] }} h-4 rounded-full"
+                                            style="width: {{ $percentage }}%"></div>
+                                    </div>
                                 </div>
-                                <div class="w-full bg-gray-200 rounded-full h-4">
-                                    <div class="{{ $colors[$colorIndex] }} h-4 rounded-full"
-                                        style="width: {{ $percentage }}%"></div>
-                                </div>
-                            </div>
-                        @endforeach
+                            @endforeach
+                        </div>
                     </div>
                 </div>
-            </div>
         </div>
+        @endif
 
         <script>
             document.addEventListener("DOMContentLoaded", function() {
